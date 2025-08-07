@@ -19,7 +19,7 @@ A production-ready, decentralized LinkTree clone built with React, TypeScript, a
 - **Icons**: Lucide React
 - **UI Components**: Radix UI
 - **Blockchain**: Ethers.js v6 (ready for Irys integration)
-- **Deployment**: Render-ready configuration
+- **Deployment**: Vercel & Render ready
 
 ## 📦 Installation
 
@@ -35,9 +35,34 @@ npm install
 npm run dev
 ```
 
-## 🚀 Deployment on Render
+## 🚀 Deployment Options
 
-### Option 1: Automatic Deployment (Recommended)
+### Option 1: Deploy on Vercel (Recommended)
+
+1. **Connect to GitHub**:
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository: `https://github.com/Pratiikpy/irys-tree.git`
+
+2. **Automatic Configuration**:
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `npm install`
+
+3. **Deploy**:
+   - Click "Deploy"
+   - Vercel will automatically build and deploy your app
+
+**Vercel Features:**
+- ✅ **Automatic HTTPS**
+- ✅ **Global CDN**
+- ✅ **Zero downtime deployments**
+- ✅ **GitHub integration**
+- ✅ **Custom domains**
+- ✅ **Analytics included**
+
+### Option 2: Deploy on Render
 
 1. **Connect to GitHub**:
    - Go to [Render Dashboard](https://dashboard.render.com)
@@ -58,16 +83,6 @@ npm run dev
 4. **Deploy**:
    - Click "Create Web Service"
    - Render will automatically build and deploy your app
-
-### Option 2: Manual Deployment
-
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm start
-```
 
 ## 🔧 Development
 
@@ -99,10 +114,11 @@ src/
 ## 🌟 Production Features
 
 - ✅ **Zero Build Errors**: Clean, minimal dependencies
-- ✅ **Optimized Bundle**: Terser minification and code splitting
-- ✅ **Production Ready**: Render-optimized configuration
+- ✅ **Optimized Bundle**: Code splitting and minification
+- ✅ **Production Ready**: Vercel & Render optimized
 - ✅ **Health Checks**: Automatic health monitoring
 - ✅ **Auto Deploy**: GitHub integration for continuous deployment
+- ✅ **SPA Routing**: All routes work with client-side routing
 
 ## 🔗 Environment Variables
 
@@ -133,8 +149,8 @@ src/
    npm run dev
    ```
 
-3. **Deploy to Render**:
-   - Connect GitHub repository to Render
+3. **Deploy to Vercel**:
+   - Connect GitHub repository to Vercel
    - Automatic deployment on every push
 
 ## 📝 License
