@@ -60,7 +60,7 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
   }
 
   // Upload profile to Irys (mock implementation)
-  const uploadProfile = async (profileData: any, walletAddress: string) => {
+  const uploadProfile = async (_profileData: any, _walletAddress: string) => {
     try {
       if (!irys.uploader) {
         throw new Error('Irys not connected')
@@ -106,7 +106,7 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
   }
 
   // Fund Irys account (mock implementation)
-  const fundAccount = async (amount: string) => {
+  const fundAccount = async (_amount: string) => {
     try {
       if (!irys.uploader) {
         throw new Error('Irys not connected')

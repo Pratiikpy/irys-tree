@@ -35,7 +35,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
   // Check if MetaMask is installed
   const isMetaMaskInstalled = () => {
-    return typeof window !== 'undefined' && window.ethereum
+    return typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask
   }
 
   // Connect to MetaMask
@@ -45,7 +45,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         throw new Error('MetaMask is not installed. Please install MetaMask to continue.')
       }
 
-      const provider = new ethers.BrowserProvider(window.ethereum)
+      const provider = new ethers.BrowserProvider(window.ethereum!)
       
       // Request account access
       const accounts = await provider.send('eth_requestAccounts', [])
@@ -72,7 +72,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       })
 
       // Listen for account changes
-      window.ethereum.on('accountsChanged', (accounts: string[]) => {
+      window.ethereum!.on('accountsChanged', (accounts: string[]) => {
         if (accounts.length === 0) {
           disconnectWallet()
         } else {
@@ -81,7 +81,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       })
 
       // Listen for chain changes
-      window.ethereum.on('chainChanged', (chainId: string) => {
+      window.ethereum!.on('chainChanged', (chainId: string) => {
         setWallet(prev => ({ ...prev, chainId: Number(chainId) }))
       })
 
@@ -109,13 +109,13 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         throw new Error('MetaMask is not installed')
       }
 
-      await window.ethereum.request({
+      await window.ethereum!.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${chainId.toString(16)}` }]
       })
 
       // Update wallet state
-      const provider = new ethers.BrowserProvider(window.ethereum)
+      const provider = new ethers.BrowserProvider(window.ethereum!)
       const network = await provider.getNetwork()
       setWallet(prev => ({ ...prev, chainId: Number(network.chainId) }))
 
@@ -144,14 +144,26 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     }
   }
 
-  // Auto-connect on mount if previously connected
+  // Check if wallet is already connected on mount
   useEffect(() => {
     const checkConnection = async () => {
-      if (isMetaMaskInstalled() && window.ethereum.selectedAddress) {
+      if (isMetaMaskInstalled() && window.ethereum!.selectedAddress) {
         try {
-          await connectWallet()
+          const provider = new ethers.BrowserProvider(window.ethereum!)
+          const address = window.ethereum!.selectedAddress
+          const network = await provider.getNetwork()
+          const balance = await provider.getBalance(address)
+          const balanceInEth = ethers.formatEther(balance)
+
+          setWallet({
+            isConnected: true,
+            address,
+            provider,
+            chainId: Number(network.chainId),
+            balance: balanceInEth
+          })
         } catch (error) {
-          console.error('Auto-connect failed:', error)
+          console.error('Error checking wallet connection:', error)
         }
       }
     }

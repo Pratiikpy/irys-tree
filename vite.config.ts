@@ -32,7 +32,23 @@ export default defineConfig({
     include: ['buffer', 'crypto-browserify', 'stream-browserify'],
   },
   server: {
-    port: 5173,
-    host: true,
+    port: parseInt(process.env.PORT || '5173'),
+    host: '0.0.0.0',
+  },
+  preview: {
+    port: parseInt(process.env.PORT || '4173'),
+    host: '0.0.0.0',
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+        },
+      },
+    },
   },
 }) 
