@@ -15,6 +15,7 @@ const Create: React.FC = () => {
   const [profile, setProfile] = useState<IrysProfile>({
     version: "1.0",
     name: "",
+    username: "", // Add username field
     bio: "",
     avatar: "",
     links: [
@@ -148,11 +149,27 @@ const Create: React.FC = () => {
       return
     }
 
+    if (!profile.username.trim()) {
+      alert('Please enter a username')
+      return
+    }
+
+    // Validate username format
+    const usernameRegex = /^[a-z0-9-]+$/
+    if (!usernameRegex.test(profile.username)) {
+      alert('Username can only contain letters, numbers, and hyphens')
+      return
+    }
+
     setIsLoading(true)
     try {
+      // Add transaction ID to metadata after upload
       const result = await uploadProfile(profile, wallet.address!)
-      alert(`Profile created successfully! Transaction ID: ${result.transactionId}`)
-      navigate(`/p/${result.transactionId}`)
+      
+      alert(`Profile created successfully! Your profile is now available at: irys-tree.vercel.app/${profile.username}\n\nTransaction ID: ${result.transactionId}`)
+      
+      // Navigate to username-based URL
+      navigate(`/${profile.username}`)
     } catch (error) {
       console.error('Error creating profile:', error)
       alert('Error creating profile. Please try again.')
@@ -235,6 +252,39 @@ const Create: React.FC = () => {
                   }}
                   required
                 />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                  Username *
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>irys-tree.vercel.app/</span>
+                  <input
+                    type="text"
+                    value={profile.username}
+                    onChange={(e) => setProfile(prev => ({ 
+                      ...prev, 
+                      username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') 
+                    }))}
+                    placeholder="your-username"
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '0.375rem',
+                      fontSize: '1rem'
+                    }}
+                    required
+                  />
+                </div>
+                <p style={{ 
+                  fontSize: '0.75rem', 
+                  color: '#6b7280', 
+                  marginTop: '0.25rem' 
+                }}>
+                  Only letters, numbers, and hyphens allowed. This will be your unique URL.
+                </p>
               </div>
               
               <div>

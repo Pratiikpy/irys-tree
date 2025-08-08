@@ -3,6 +3,7 @@ export interface IrysProfile {
   version: "1.0";
   // Basic Info
   name: string;
+  username: string; // Unique username for URL routing
   bio: string;
   avatar?: string; // base64 or IPFS hash
   
@@ -26,6 +27,7 @@ export interface IrysProfile {
     creator: string; // wallet address
     views: number;
     isPublic: boolean;
+    transactionId?: string; // Irys transaction ID
   };
 }
 

@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ExternalLink, Share2, Eye, Heart, Download, ArrowLeft, Database, Globe } from 'lucide-react'
+import { ExternalLink, Share2, Eye, Heart, Download, ArrowLeft, Globe, Database } from 'lucide-react'
 import { useIrys } from '@/contexts/IrysContext'
 import { useAnalytics } from '@/contexts/AnalyticsContext'
 import { IrysProfile } from '@/types'
 
-const ProfileView: React.FC = () => {
-  const { transactionId } = useParams()
+const UsernameProfile: React.FC = () => {
+  const { username } = useParams()
   const { fetchProfile } = useIrys()
   const { trackProfileView, trackLinkClick } = useAnalytics()
   
-  const [profile, setProfile] = useState<IrysProfile | null>(null)
+  const [_profile, _setProfile] = useState<IrysProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [_transactionId, _setTransactionId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!transactionId) {
-      setError('No transaction ID provided')
+    if (!username) {
+      setError('No username provided')
       setIsLoading(false)
       return
     }
@@ -24,11 +25,17 @@ const ProfileView: React.FC = () => {
     const loadProfile = async () => {
       try {
         setIsLoading(true)
-        const profileData = await fetchProfile(transactionId)
-        setProfile(profileData)
         
-        // Track profile view
-        await trackProfileView(transactionId)
+        // For now, we'll need to implement a way to map usernames to transaction IDs
+        // This could be done by storing username -> transactionId mappings in Irys
+        // For demo purposes, we'll use a mock approach
+        
+        // TODO: Implement proper username to transactionId mapping
+        // This would typically involve querying Irys for profiles with specific username tags
+        
+        // For now, we'll show a placeholder
+        setError('Username-based profiles coming soon! This feature will allow you to access profiles via custom URLs like yourdomain.com/username')
+        
       } catch (err) {
         console.error('Error loading profile:', err)
         setError('Profile not found or could not be loaded')
@@ -38,11 +45,13 @@ const ProfileView: React.FC = () => {
     }
 
     loadProfile()
-  }, [transactionId, fetchProfile, trackProfileView])
+  }, [username, fetchProfile, trackProfileView])
 
   const handleLinkClick = async (linkId: string, url: string) => {
     try {
-      await trackLinkClick(transactionId!, linkId)
+      if (_transactionId) {
+        await trackLinkClick(_transactionId, linkId)
+      }
       window.open(url, '_blank', 'noopener,noreferrer')
     } catch (error) {
       console.error('Error tracking link click:', error)
@@ -53,7 +62,7 @@ const ProfileView: React.FC = () => {
   const shareProfile = () => {
     if (navigator.share) {
       navigator.share({
-        title: profile?.name || 'Check out this profile',
+        title: _profile?.name || 'Check out this profile',
         url: window.location.href
       })
     } else {
@@ -94,7 +103,7 @@ const ProfileView: React.FC = () => {
     )
   }
 
-  if (error || !profile) {
+  if (error || !_profile) {
     return (
       <div style={{ 
         minHeight: '100vh', 
@@ -104,27 +113,55 @@ const ProfileView: React.FC = () => {
         background: '#f8fafc',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
       }}>
-        <div style={{ textAlign: 'center', maxWidth: '400px', padding: '2rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '500px', padding: '2rem' }}>
           <div style={{ 
             fontSize: '3rem', 
             marginBottom: '1rem',
-            color: '#ef4444'
-          }}>⚠️</div>
+            color: '#3b82f6'
+          }}>🚀</div>
           <h1 style={{ 
             fontSize: '1.5rem', 
             fontWeight: '600', 
             color: '#1f2937',
             marginBottom: '0.5rem'
           }}>
-            Profile Not Found
+            Username Profiles Coming Soon!
           </h1>
           <p style={{ 
             color: '#64748b', 
             marginBottom: '2rem',
             lineHeight: '1.6'
           }}>
-            {error || 'The profile you\'re looking for doesn\'t exist or could not be loaded.'}
+            {error || 'This feature will allow you to access profiles via custom URLs like yourdomain.com/username'}
           </p>
+          
+          <div style={{ 
+            background: '#fef3c7',
+            border: '1px solid #f59e0b',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            marginBottom: '2rem'
+          }}>
+            <h3 style={{ 
+              fontWeight: '600', 
+              color: '#92400e',
+              marginBottom: '0.5rem'
+            }}>
+              How it will work:
+            </h3>
+            <ul style={{ 
+              textAlign: 'left',
+              color: '#92400e',
+              fontSize: '0.875rem',
+              lineHeight: '1.6'
+            }}>
+              <li>• Create a profile with a unique username</li>
+              <li>• Access your profile at: <strong>irys-tree.vercel.app/your-username</strong></li>
+              <li>• Share the clean URL with others</li>
+              <li>• View the raw data on Irys gateway</li>
+            </ul>
+          </div>
+          
           <Link to="/" style={{ 
             display: 'inline-flex',
             alignItems: 'center',
@@ -148,11 +185,11 @@ const ProfileView: React.FC = () => {
   return (
     <div style={{ 
       minHeight: '100vh',
-      background: profile.theme.backgroundType === 'color' 
-        ? profile.theme.backgroundColor 
+      background: _profile.theme.backgroundType === 'color' 
+        ? _profile.theme.backgroundColor 
         : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      fontFamily: profile.theme.fontFamily || 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-      color: profile.theme.textColor || '#1f2937',
+      fontFamily: _profile.theme.fontFamily || 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+      color: _profile.theme.textColor || '#1f2937',
       padding: '1rem'
     }}>
       {/* Back Button */}
@@ -167,7 +204,7 @@ const ProfileView: React.FC = () => {
           gap: '0.5rem',
           padding: '0.5rem 1rem',
           background: 'rgba(255, 255, 255, 0.1)',
-          color: profile.theme.textColor || '#1f2937',
+          color: _profile.theme.textColor || '#1f2937',
           textDecoration: 'none',
           borderRadius: '0.5rem',
           fontSize: '0.875rem',
@@ -193,11 +230,11 @@ const ProfileView: React.FC = () => {
           marginBottom: '2rem'
         }}>
           {/* Avatar */}
-          {profile.avatar && (
+          {_profile.avatar && (
             <div style={{ marginBottom: '1.5rem' }}>
               <img 
-                src={profile.avatar} 
-                alt={profile.name}
+                src={_profile.avatar} 
+                alt={_profile.name}
                 style={{
                   width: '96px',
                   height: '96px',
@@ -215,29 +252,39 @@ const ProfileView: React.FC = () => {
             fontSize: '1.75rem', 
             fontWeight: '700', 
             marginBottom: '0.5rem',
-            color: profile.theme.textColor || '#1f2937',
+            color: _profile.theme.textColor || '#1f2937',
             letterSpacing: '-0.025em'
           }}>
-            {profile.name}
+            {_profile.name}
           </h1>
 
+          {/* Username */}
+          <div style={{ 
+            fontSize: '0.875rem',
+            color: _profile.theme.textColor || '#1f2937',
+            opacity: 0.7,
+            marginBottom: '1rem'
+          }}>
+            @{_profile.username}
+          </div>
+
           {/* Bio */}
-          {profile.bio && (
+          {_profile.bio && (
             <p style={{ 
               fontSize: '1rem', 
               marginBottom: '1.5rem',
-              color: profile.theme.textColor || '#1f2937',
+              color: _profile.theme.textColor || '#1f2937',
               opacity: 0.8,
               lineHeight: '1.6',
               maxWidth: '500px',
               margin: '0 auto 1.5rem'
             }}>
-              {profile.bio}
+              {_profile.bio}
             </p>
           )}
 
           {/* Stats */}
-          {profile.customization.showProfileViews && (
+          {_profile.customization.showProfileViews && (
             <div style={{ 
               display: 'flex', 
               justifyContent: 'center', 
@@ -248,11 +295,11 @@ const ProfileView: React.FC = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <Eye style={{ height: '0.875rem', width: '0.875rem' }} />
-                <span>{profile.metadata?.views || 0} views</span>
+                <span>{_profile.metadata?.views || 0} views</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <Heart style={{ height: '0.875rem', width: '0.875rem' }} />
-                <span>{profile.links.reduce((sum, link) => sum + (link.analytics?.clicks || 0), 0)} clicks</span>
+                <span>{_profile.links.reduce((sum, link) => sum + (link.analytics?.clicks || 0), 0)} clicks</span>
               </div>
             </div>
           )}
@@ -264,7 +311,7 @@ const ProfileView: React.FC = () => {
           gap: '0.75rem',
           marginBottom: '2rem'
         }}>
-          {profile.links
+          {_profile.links
             .filter(link => link.isActive)
             .sort((a, b) => a.order - b.order)
             .map((link) => (
@@ -277,8 +324,8 @@ const ProfileView: React.FC = () => {
                   background: link.style?.backgroundColor || '#3b82f6',
                   color: link.style?.textColor || '#ffffff',
                   border: link.style?.borderColor ? `1px solid ${link.style.borderColor}` : 'none',
-                  borderRadius: profile.theme.buttonStyle === 'rounded' ? '0.75rem' : 
-                             profile.theme.buttonStyle === 'pill' ? '2rem' : '0.375rem',
+                  borderRadius: _profile.theme.buttonStyle === 'rounded' ? '0.75rem' : 
+                             _profile.theme.buttonStyle === 'pill' ? '2rem' : '0.375rem',
                   fontSize: '1rem',
                   fontWeight: '500',
                   cursor: 'pointer',
@@ -287,7 +334,7 @@ const ProfileView: React.FC = () => {
                   justifyContent: 'space-between',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                  fontFamily: link.style?.font || profile.theme.fontFamily || 'Inter, sans-serif',
+                  fontFamily: link.style?.font || _profile.theme.fontFamily || 'Inter, sans-serif',
                   position: 'relative',
                   overflow: 'hidden'
                 }}
@@ -312,7 +359,7 @@ const ProfileView: React.FC = () => {
         </div>
 
         {/* Irys Gateway Link */}
-        {transactionId && (
+        {_transactionId && (
           <div style={{ 
             textAlign: 'center',
             marginBottom: '2rem',
@@ -335,7 +382,7 @@ const ProfileView: React.FC = () => {
               </span>
             </div>
             <a
-              href={`https://devnet.irys.xyz/${transactionId}`}
+              href={`https://devnet.irys.xyz/${_transactionId}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -344,7 +391,7 @@ const ProfileView: React.FC = () => {
                 gap: '0.5rem',
                 padding: '0.5rem 1rem',
                 background: 'rgba(255, 255, 255, 0.2)',
-                color: profile.theme.textColor || '#1f2937',
+                color: _profile.theme.textColor || '#1f2937',
                 textDecoration: 'none',
                 borderRadius: '0.375rem',
                 fontSize: '0.75rem',
@@ -364,7 +411,7 @@ const ProfileView: React.FC = () => {
         )}
 
         {/* Social Media */}
-        {Object.values(profile.social).some(url => url) && (
+        {Object.values(_profile.social).some(url => url) && (
           <div style={{ 
             textAlign: 'center',
             marginBottom: '2rem'
@@ -375,7 +422,7 @@ const ProfileView: React.FC = () => {
               gap: '1rem',
               flexWrap: 'wrap'
             }}>
-              {Object.entries(profile.social).map(([platform, url]) => {
+              {Object.entries(_profile.social).map(([platform, url]) => {
                 if (!url) return null
                 
                 const getIcon = (platform: string) => {
@@ -414,7 +461,7 @@ const ProfileView: React.FC = () => {
                       height: '2.5rem',
                       background: 'rgba(255, 255, 255, 0.1)',
                       borderRadius: '50%',
-                      color: profile.theme.textColor || '#1f2937',
+                      color: _profile.theme.textColor || '#1f2937',
                       textDecoration: 'none',
                       fontSize: '1.25rem',
                       transition: 'all 0.2s',
@@ -459,7 +506,7 @@ const ProfileView: React.FC = () => {
                 background: 'rgba(255, 255, 255, 0.1)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 borderRadius: '0.5rem',
-                color: profile.theme.textColor || '#1f2937',
+                color: _profile.theme.textColor || '#1f2937',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 backdropFilter: 'blur(10px)',
@@ -477,13 +524,13 @@ const ProfileView: React.FC = () => {
               Share
             </button>
 
-            {profile.customization.enableDownloadVCard && (
+            {_profile.customization.enableDownloadVCard && (
               <button
                 onClick={() => {
                   // Generate vCard
                   const vcard = `BEGIN:VCARD
 VERSION:3.0
-FN:${profile.name}
+FN:${_profile.name}
 ORG:IrysLinkTree
 URL:${window.location.href}
 END:VCARD`
@@ -492,7 +539,7 @@ END:VCARD`
                   const url = URL.createObjectURL(blob)
                   const a = document.createElement('a')
                   a.href = url
-                  a.download = `${profile.name}.vcf`
+                  a.download = `${_profile.name}.vcf`
                   a.click()
                   URL.revokeObjectURL(url)
                 }}
@@ -504,7 +551,7 @@ END:VCARD`
                   background: 'rgba(255, 255, 255, 0.1)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   borderRadius: '0.5rem',
-                  color: profile.theme.textColor || '#1f2937',
+                  color: _profile.theme.textColor || '#1f2937',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   backdropFilter: 'blur(10px)',
@@ -531,7 +578,7 @@ END:VCARD`
           padding: '2rem 0',
           opacity: 0.6,
           fontSize: '0.75rem',
-          color: profile.theme.textColor || '#1f2937'
+          color: _profile.theme.textColor || '#1f2937'
         }}>
           <div style={{ marginBottom: '0.5rem' }}>
             Powered by <strong>IrysLinkTree</strong>
@@ -541,7 +588,7 @@ END:VCARD`
             fontSize: '0.625rem',
             opacity: 0.8
           }}>
-            {transactionId?.slice(0, 8)}...{transactionId?.slice(-8)}
+            {_transactionId ? `${_transactionId.slice(0, 8)}...${_transactionId.slice(-8)}` : 'Username Profile'}
           </div>
         </div>
       </div>
@@ -549,4 +596,4 @@ END:VCARD`
   )
 }
 
-export default ProfileView 
+export default UsernameProfile 

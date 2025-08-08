@@ -23,14 +23,15 @@ const Discover: React.FC = () => {
         profile: {
           version: "1.0",
           name: "John Doe",
-          bio: "Web3 developer and blockchain enthusiast",
+          username: "johndoe",
+          bio: "Digital creator and web3 enthusiast",
           avatar: "",
           links: [
             {
               id: "1",
-              title: "Portfolio",
-              url: "https://johndoe.dev",
-              icon: "💼",
+              title: "My Website",
+              url: "https://example.com",
+              icon: "🌐",
               isActive: true,
               order: 1,
               style: {
@@ -39,7 +40,9 @@ const Discover: React.FC = () => {
                 borderRadius: 8,
                 font: "Inter"
               },
-              analytics: { clicks: 45 }
+              analytics: {
+                clicks: 45
+              }
             }
           ],
           theme: {
@@ -59,10 +62,7 @@ const Discover: React.FC = () => {
             showVerificationBadge: false,
             enableDownloadVCard: false
           },
-          social: {
-            twitter: "https://twitter.com/johndoe",
-            github: "https://github.com/johndoe"
-          },
+          social: {},
           settings: {
             isPublic: true,
             allowSearch: true,
@@ -75,10 +75,10 @@ const Discover: React.FC = () => {
             ageRestricted: false
           },
           metadata: {
-            createdAt: Date.now() - 86400000, // 1 day ago
+            createdAt: Date.now() - 86400000,
             updatedAt: Date.now() - 86400000,
-            creator: "0x123456789abcdef",
-            views: 156,
+            creator: "0x1234567890123456789012345678901234567890",
+            views: 1234,
             isPublic: true
           }
         },
@@ -92,48 +92,36 @@ const Discover: React.FC = () => {
         transactionId: 'mock_tx_987654321',
         profile: {
           version: "1.0",
-          name: "Sarah Artist",
-          bio: "Digital artist creating unique NFT collections",
+          name: "Jane Smith",
+          username: "janesmith",
+          bio: "Content creator and influencer",
           avatar: "",
           links: [
             {
               id: "1",
-              title: "NFT Gallery",
-              url: "https://opensea.io/sarahartist",
-              icon: "🎨",
+              title: "YouTube",
+              url: "https://youtube.com/@janesmith",
+              icon: "📺",
               isActive: true,
               order: 1,
               style: {
-                backgroundColor: "#8b5cf6",
+                backgroundColor: "#ff0000",
                 textColor: "#ffffff",
                 borderRadius: 8,
                 font: "Inter"
               },
-              analytics: { clicks: 89 }
-            },
-            {
-              id: "2",
-              title: "Instagram",
-              url: "https://instagram.com/sarahartist",
-              icon: "📷",
-              isActive: true,
-              order: 2,
-              style: {
-                backgroundColor: "#ec4899",
-                textColor: "#ffffff",
-                borderRadius: 8,
-                font: "Inter"
-              },
-              analytics: { clicks: 67 }
+              analytics: {
+                clicks: 89
+              }
             }
           ],
           theme: {
             backgroundType: "color",
-            backgroundColor: "#fdf2f8",
+            backgroundColor: "#ffffff",
             fontFamily: "Inter",
             textColor: "#1f2937",
             buttonStyle: "rounded",
-            buttonColor: "#8b5cf6",
+            buttonColor: "#ff0000",
             buttonTextColor: "#ffffff",
             layout: "center",
             spacing: "normal",
@@ -144,10 +132,7 @@ const Discover: React.FC = () => {
             showVerificationBadge: false,
             enableDownloadVCard: false
           },
-          social: {
-            instagram: "https://instagram.com/sarahartist",
-            twitter: "https://twitter.com/sarahartist"
-          },
+          social: {},
           settings: {
             isPublic: true,
             allowSearch: true,
@@ -160,10 +145,10 @@ const Discover: React.FC = () => {
             ageRestricted: false
           },
           metadata: {
-            createdAt: Date.now() - 172800000, // 2 days ago
+            createdAt: Date.now() - 172800000,
             updatedAt: Date.now() - 172800000,
-            creator: "0xabcdef123456789",
-            views: 234,
+            creator: "0xabcdef1234567890abcdef1234567890abcdef12",
+            views: 567,
             isPublic: true
           }
         },

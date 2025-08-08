@@ -6,6 +6,7 @@ import LoadingSpinner from './components/shared/LoadingSpinner'
 const Home = lazy(() => import('./pages/Home'))
 const Create = lazy(() => import('./pages/Create'))
 const ProfileView = lazy(() => import('./pages/ProfileView'))
+const UsernameProfile = lazy(() => import('./pages/UsernameProfile'))
 const Discover = lazy(() => import('./pages/Discover'))
 const Verify = lazy(() => import('./pages/Verify'))
 const Analytics = lazy(() => import('./pages/Analytics'))
@@ -22,6 +23,7 @@ function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/p/:transactionId" element={<ProfileView />} />
           <Route path="/p/:transactionId/edit" element={<Create />} />
+          <Route path="/:username" element={<UsernameProfile />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/verify/:transactionId" element={<Verify />} />
           <Route path="/analytics/:transactionId" element={<Analytics />} />
