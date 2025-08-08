@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Wallet, Plus, Search, Globe, Shield, Zap, ArrowRight, Sparkles, Star, Zap as Lightning } from 'lucide-react'
+import { Wallet, Plus, Search, Globe, Shield, ArrowRight, Sparkles, Star, Zap as Lightning } from 'lucide-react'
 import { useWallet } from '@/contexts/WalletContext'
 
 const Home: React.FC = () => {
