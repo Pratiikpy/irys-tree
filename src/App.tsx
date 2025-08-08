@@ -21,15 +21,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<Create />} />
-          <Route path="/p/:transactionId" element={<ProfileView />} />
-          <Route path="/p/:transactionId/edit" element={<Create />} />
-          <Route path="/:username" element={<UsernameProfile />} />
           <Route path="/discover" element={<Discover />} />
-          <Route path="/verify/:transactionId" element={<Verify />} />
-          <Route path="/analytics/:transactionId" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/p/:transactionId" element={<ProfileView />} />
+          <Route path="/p/:transactionId/edit" element={<Create />} />
+          <Route path="/verify/:transactionId" element={<Verify />} />
+          <Route path="/analytics/:transactionId" element={<Analytics />} />
+          <Route path="/:username" element={<UsernameProfile />} />
         </Routes>
       </Suspense>
     </div>
