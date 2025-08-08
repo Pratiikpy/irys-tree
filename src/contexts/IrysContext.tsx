@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { IrysState } from '@/types'
 import { useWallet } from './WalletContext'
+import { WebUploader } from '@irys/web-upload'
+import { WebEthereum } from '@irys/web-upload-ethereum'
+import { EthersV6Adapter } from '@irys/web-upload-ethereum-ethers-v6'
 
 interface IrysContextType {
   irys: IrysState
@@ -8,6 +11,7 @@ interface IrysContextType {
   uploadProfile: (profileData: any, walletAddress: string) => Promise<{ transactionId: string; url: string; receipt: any }>
   getBalance: () => Promise<string>
   fundAccount: (amount: string) => Promise<void>
+  fetchProfile: (transactionId: string) => Promise<any>
 }
 
 const IrysContext = createContext<IrysContextType | undefined>(undefined)
@@ -33,7 +37,7 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     isUploading: false
   })
 
-  // Connect to Irys (mock implementation)
+  // Connect to Irys with modern SDK
   const connectIrys = async () => {
     try {
       if (!wallet.provider) {
@@ -42,13 +46,20 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
 
       setIrys(prev => ({ ...prev, isUploading: true }))
 
-      // Mock Irys connection
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Create Irys uploader with modern SDK
+      const irysUploader = await WebUploader(WebEthereum)
+        .withAdapter(EthersV6Adapter(wallet.provider))
+        .withRpc("https://testnet-rpc.irys.xyz/v1/execution-rpc") // Irys testnet RPC
+        .devnet() // Use devnet for development (free transactions)
+
+      // Get balance
+      const balance = await irysUploader.getBalance()
+      const balanceInIrys = (Number(balance) / 1e18).toString()
 
       setIrys({
-        uploader: {} as any, // Mock uploader
+        uploader: irysUploader,
         isConnected: true,
-        balance: "0.1", // Mock balance
+        balance: balanceInIrys,
         isUploading: false
       })
 
@@ -59,8 +70,8 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     }
   }
 
-  // Upload profile to Irys (mock implementation)
-  const uploadProfile = async (_profileData: any, _walletAddress: string) => {
+  // Upload profile to Irys
+  const uploadProfile = async (profileData: any, walletAddress: string) => {
     try {
       if (!irys.uploader) {
         throw new Error('Irys not connected')
@@ -68,17 +79,36 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
 
       setIrys(prev => ({ ...prev, isUploading: true }))
 
-      // Mock upload delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Prepare profile data with metadata
+      const profileWithMetadata = {
+        ...profileData,
+        metadata: {
+          ...profileData.metadata,
+          updatedAt: Date.now(),
+          creator: walletAddress
+        }
+      }
 
-      const mockTransactionId = `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      // Create tags for searchability
+      const tags = [
+        { name: "Content-Type", value: "application/json" },
+        { name: "App-Name", value: "IrysLinkTree" },
+        { name: "App-Version", value: "1.0.0" },
+        { name: "Profile-Type", value: "linktree" },
+        { name: "Creator", value: walletAddress },
+        { name: "Name", value: profileData.name },
+        { name: "Public", value: profileData.metadata.isPublic ? "true" : "false" }
+      ]
+
+      // Upload to Irys testnet
+      const receipt = await irys.uploader.upload(JSON.stringify(profileWithMetadata), { tags })
 
       setIrys(prev => ({ ...prev, isUploading: false }))
 
       return {
-        transactionId: mockTransactionId,
-        url: `https://gateway.irys.xyz/${mockTransactionId}`,
-        receipt: { id: mockTransactionId }
+        transactionId: receipt.id,
+        url: `https://gateway.irys.xyz/${receipt.id}`,
+        receipt
       }
 
     } catch (error) {
@@ -88,16 +118,32 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     }
   }
 
-  // Get Irys balance (mock implementation)
+  // Fetch profile from Irys
+  const fetchProfile = async (transactionId: string) => {
+    try {
+      const response = await fetch(`https://gateway.irys.xyz/${transactionId}`)
+      if (!response.ok) {
+        throw new Error('Profile not found')
+      }
+      return await response.json()
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+      throw error
+    }
+  }
+
+  // Get Irys balance
   const getBalance = async (): Promise<string> => {
     try {
       if (!irys.uploader) {
         throw new Error('Irys not connected')
       }
 
-      const mockBalance = "0.1"
-      setIrys(prev => ({ ...prev, balance: mockBalance }))
-      return mockBalance
+      const balance = await irys.uploader.getBalance()
+      const balanceInIrys = (Number(balance) / 1e18).toString()
+      
+      setIrys(prev => ({ ...prev, balance: balanceInIrys }))
+      return balanceInIrys
 
     } catch (error) {
       console.error('Error getting Irys balance:', error)
@@ -105,15 +151,15 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     }
   }
 
-  // Fund Irys account (mock implementation)
-  const fundAccount = async (_amount: string) => {
+  // Fund Irys account
+  const fundAccount = async (amount: string) => {
     try {
       if (!irys.uploader) {
         throw new Error('Irys not connected')
       }
 
-      // Mock funding delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const amountInWei = (parseFloat(amount) * 1e18).toString()
+      await irys.uploader.fund(amountInWei)
 
       // Update balance after funding
       await getBalance()
@@ -136,7 +182,8 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     connectIrys,
     uploadProfile,
     getBalance,
-    fundAccount
+    fundAccount,
+    fetchProfile
   }
 
   return (

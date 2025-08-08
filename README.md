@@ -11,6 +11,31 @@ A production-ready, decentralized LinkTree clone built with React, TypeScript, a
 - **Verifiable Authenticity**: Cryptographic timestamps prove creation
 - **Responsive Design**: Works perfectly on all devices
 
+## 🧪 Irys Testnet Setup
+
+This application is configured to use **Irys Testnet** for development and testing. Here's how to get started:
+
+### 1. Add Irys Testnet to MetaMask
+
+**Network Details:**
+- **Network Name**: Irys Testnet
+- **RPC URL**: `https://testnet-rpc.irys.xyz/v1/execution-rpc`
+- **Chain ID**: `1270`
+- **Currency Symbol**: IRYS
+- **Block Explorer**: `https://testnet-explorer.irys.xyz`
+
+### 2. Get Free IRYS Tokens
+
+1. Visit the [Irys Faucet](https://irys.xyz/faucet)
+2. Connect your wallet
+3. Request testnet IRYS tokens (free!)
+
+### 3. Connect and Create
+
+1. Connect your MetaMask wallet to the app
+2. Create your LinkTree profile
+3. Upload to Irys testnet (free transactions)
+
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite
@@ -18,7 +43,7 @@ A production-ready, decentralized LinkTree clone built with React, TypeScript, a
 - **Routing**: React Router DOM
 - **Icons**: Lucide React
 - **UI Components**: Radix UI
-- **Blockchain**: Ethers.js v6 (ready for Irys integration)
+- **Blockchain**: Ethers.js v6 + Irys Web Upload SDK
 - **Deployment**: Vercel & Render ready
 
 ## 📦 Installation
@@ -135,6 +160,31 @@ src/
 4. **"Zero Recurring Fees"** - Pay once with crypto, own forever
 5. **"Censorship Resistance"** - Decentralized hosting
 
+## 🧪 Testing with Irys Testnet
+
+### Current Configuration
+- **Network**: Irys Testnet (Chain ID: 1270)
+- **Currency**: IRYS tokens
+- **Cost**: Free (testnet tokens)
+- **Gateway**: `https://gateway.irys.xyz`
+
+### How to Test
+1. **Add Irys Testnet** to MetaMask
+2. **Get free IRYS tokens** from [Irys Faucet](https://irys.xyz/faucet)
+3. **Connect wallet** to the app
+4. **Create profiles** for free
+5. **Test all features** without real costs
+
+### Switching to Mainnet
+When ready for production, update the Irys configuration in `src/contexts/IrysContext.tsx`:
+
+```javascript
+// Change from testnet to mainnet
+const irysUploader = await WebUploader(WebEthereum)
+  .withAdapter(EthersV6Adapter(wallet.provider))
+  .mainnet() // Use mainnet for production
+```
+
 ## 🚀 Quick Start
 
 1. **Clone & Install**:
@@ -144,12 +194,16 @@ src/
    npm install
    ```
 
-2. **Run Locally**:
+2. **Setup Irys Testnet**:
+   - Add Irys Testnet to MetaMask
+   - Get free IRYS tokens from faucet
+
+3. **Run Locally**:
    ```bash
    npm run dev
    ```
 
-3. **Deploy to Vercel**:
+4. **Deploy to Vercel**:
    - Connect GitHub repository to Vercel
    - Automatic deployment on every push
 
