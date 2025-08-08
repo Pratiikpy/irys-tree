@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ExternalLink, Share2, Eye, Heart, Download, ArrowLeft, Globe, Database } from 'lucide-react'
+import { ExternalLink, Share2, Eye, Heart, Download, ArrowLeft, Globe, Database, Sparkles, Search } from 'lucide-react'
 import { useIrys } from '@/contexts/IrysContext'
 import { useAnalytics } from '@/contexts/AnalyticsContext'
 import { IrysProfile } from '@/types'
@@ -77,31 +77,14 @@ const UsernameProfile: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: '#f8fafc',
-        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid #e2e8f0',
-            borderTop: '3px solid #3b82f6',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem'
-          }} />
-          <div style={{ color: '#64748b', fontSize: '0.875rem' }}>Loading profile...</div>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
+      <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-teal-400 rounded-full animate-spin mx-auto" style={{ animationDelay: '-0.5s' }}></div>
+          </div>
+          <div className="text-emerald-300/70 text-lg font-medium">Loading @{username}...</div>
+          <div className="text-emerald-300/50 text-sm mt-2">Powered by Irys Datachain</div>
         </div>
       </div>
     )
@@ -109,100 +92,58 @@ const UsernameProfile: React.FC = () => {
 
   if (error || !profile) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: '#f8fafc',
-        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
-      }}>
-        <div style={{ textAlign: 'center', maxWidth: '500px', padding: '2rem' }}>
-          <div style={{ 
-            fontSize: '3rem', 
-            marginBottom: '1rem',
-            color: '#ef4444'
-          }}>🔍</div>
-          <h1 style={{ 
-            fontSize: '1.5rem', 
-            fontWeight: '600', 
-            color: '#1f2937',
-            marginBottom: '0.5rem'
-          }}>
+      <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Search className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-4">
             Profile Not Found
           </h1>
-          <p style={{ 
-            color: '#64748b', 
-            marginBottom: '2rem',
-            lineHeight: '1.6'
-          }}>
-            The profile for <strong>@{username}</strong> could not be found. 
+          <p className="text-emerald-300/70 mb-6 leading-relaxed">
+            The profile for <strong className="text-emerald-400">@{username}</strong> could not be found.
             {error && error !== 'Profile not found or could not be loaded' && (
               <span> {error}</span>
             )}
           </p>
           
-          <div style={{ 
-            background: '#fef3c7',
-            border: '1px solid #f59e0b',
-            borderRadius: '0.5rem',
-            padding: '1rem',
-            marginBottom: '2rem'
-          }}>
-            <h3 style={{ 
-              fontWeight: '600', 
-              color: '#92400e',
-              marginBottom: '0.5rem'
-            }}>
+          <div className="bg-gradient-to-r from-emerald-400/20 to-teal-400/20 backdrop-blur-sm border border-emerald-400/30 rounded-2xl p-6 mb-8">
+            <h3 className="font-bold text-emerald-300 mb-4">
               How to create your profile:
             </h3>
-            <ul style={{ 
-              textAlign: 'left',
-              color: '#92400e',
-              fontSize: '0.875rem',
-              lineHeight: '1.6'
-            }}>
-              <li>• Go to the <strong>Create Profile</strong> page</li>
-              <li>• Choose a unique username</li>
-              <li>• Upload your profile to Irys blockchain</li>
-              <li>• Share your URL: <strong>irys-tree.vercel.app/{username}</strong></li>
+            <ul className="text-left text-emerald-300/80 text-sm space-y-2">
+              <li className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span>Go to the <strong>Create Profile</strong> page</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span>Choose a unique username</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span>Upload your profile to Irys blockchain</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                <span>Share your URL: <strong>irys-tree.vercel.app/{username}</strong></span>
+              </li>
             </ul>
           </div>
           
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: '1rem',
-            flexWrap: 'wrap'
-          }}>
-            <Link to="/create" style={{ 
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.75rem 1.5rem',
-              background: '#3b82f6',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '0.5rem',
-              fontWeight: '500',
-              transition: 'all 0.2s'
-            }}>
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <Link 
+              to="/create" 
+              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+            >
               Create Profile
             </Link>
-            <Link to="/" style={{ 
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.75rem 1.5rem',
-              background: '#f3f4f6',
-              color: '#374151',
-              textDecoration: 'none',
-              borderRadius: '0.5rem',
-              fontWeight: '500',
-              transition: 'all 0.2s'
-            }}>
-              <ArrowLeft style={{ height: '1rem', width: '1rem' }} />
-              Go Home
+            <Link 
+              to="/" 
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-white/20 hover:scale-105"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Go Home</span>
             </Link>
           </div>
         </div>
@@ -211,122 +152,71 @@ const UsernameProfile: React.FC = () => {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      background: profile.theme.backgroundType === 'color' 
-        ? profile.theme.backgroundColor 
-        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      fontFamily: profile.theme.fontFamily || 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-      color: profile.theme.textColor || '#1f2937',
-      padding: '1rem'
-    }}>
-      {/* Back Button */}
-      <div style={{ 
-        maxWidth: '680px', 
-        margin: '0 auto',
-        paddingTop: '1rem'
-      }}>
-        <Link to="/" style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.5rem 1rem',
-          background: 'rgba(255, 255, 255, 0.1)',
-          color: profile.theme.textColor || '#1f2937',
-          textDecoration: 'none',
-          borderRadius: '0.5rem',
-          fontSize: '0.875rem',
-          fontWeight: '500',
-          transition: 'all 0.2s',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
-        }}>
-          <ArrowLeft style={{ height: '1rem', width: '1rem' }} />
-          Back
-        </Link>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Profile Container */}
-      <div style={{ 
-        maxWidth: '680px', 
-        margin: '0 auto',
-        paddingTop: '2rem'
-      }}>
+      {/* Content */}
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
+        {/* Back Button */}
+        <div className="mb-8">
+          <Link 
+            to="/" 
+            className="inline-flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back</span>
+          </Link>
+        </div>
+
         {/* Profile Header */}
-        <div style={{ 
-          textAlign: 'center',
-          marginBottom: '2rem'
-        }}>
+        <div className="text-center mb-12">
           {/* Avatar */}
           {profile.avatar && (
-            <div style={{ marginBottom: '1.5rem' }}>
-              <img 
-                src={profile.avatar} 
-                alt={profile.name}
-                style={{
-                  width: '96px',
-                  height: '96px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '3px solid rgba(255, 255, 255, 0.3)',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                }}
-              />
+            <div className="mb-6">
+              <div className="relative inline-block">
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full blur opacity-25"></div>
+                <img 
+                  src={profile.avatar} 
+                  alt={profile.name}
+                  className="relative w-24 h-24 rounded-full object-cover border-4 border-white/20 shadow-2xl"
+                />
+              </div>
             </div>
           )}
 
           {/* Name */}
-          <h1 style={{ 
-            fontSize: '1.75rem', 
-            fontWeight: '700', 
-            marginBottom: '0.5rem',
-            color: profile.theme.textColor || '#1f2937',
-            letterSpacing: '-0.025em'
-          }}>
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
             {profile.name}
           </h1>
 
           {/* Username */}
-          <div style={{ 
-            fontSize: '0.875rem',
-            color: profile.theme.textColor || '#1f2937',
-            opacity: 0.7,
-            marginBottom: '1rem'
-          }}>
-            @{profile.username}
+          <div className="mb-4">
+            <span className="inline-flex items-center px-3 py-1 bg-emerald-400/20 backdrop-blur-sm text-emerald-300 rounded-full text-sm font-medium border border-emerald-400/30">
+              @{profile.username}
+            </span>
           </div>
 
           {/* Bio */}
           {profile.bio && (
-            <p style={{ 
-              fontSize: '1rem', 
-              marginBottom: '1.5rem',
-              color: profile.theme.textColor || '#1f2937',
-              opacity: 0.8,
-              lineHeight: '1.6',
-              maxWidth: '500px',
-              margin: '0 auto 1.5rem'
-            }}>
+            <p className="text-emerald-300/90 text-lg leading-relaxed max-w-lg mx-auto mb-6">
               {profile.bio}
             </p>
           )}
 
           {/* Stats */}
           {profile.customization.showProfileViews && (
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              gap: '1.5rem',
-              marginBottom: '2rem',
-              opacity: 0.7,
-              fontSize: '0.875rem'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <Eye style={{ height: '0.875rem', width: '0.875rem' }} />
+            <div className="flex justify-center space-x-8 text-emerald-300/70 text-sm">
+              <div className="flex items-center space-x-2">
+                <Eye className="w-4 h-4" />
                 <span>{profile.metadata?.views || 0} views</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <Heart style={{ height: '0.875rem', width: '0.875rem' }} />
+              <div className="flex items-center space-x-2">
+                <Heart className="w-4 h-4" />
                 <span>{profile.links.reduce((sum, link) => sum + (link.analytics?.clicks || 0), 0)} clicks</span>
               </div>
             </div>
@@ -334,11 +224,7 @@ const UsernameProfile: React.FC = () => {
         </div>
 
         {/* Links */}
-        <div style={{ 
-          display: 'grid', 
-          gap: '0.75rem',
-          marginBottom: '2rem'
-        }}>
+        <div className="space-y-4 mb-12">
           {profile.links
             .filter(link => link.isActive)
             .sort((a, b) => a.order - b.order)
@@ -346,66 +232,28 @@ const UsernameProfile: React.FC = () => {
               <button
                 key={link.id}
                 onClick={() => handleLinkClick(link.id, link.url)}
-                style={{
-                  width: '100%',
-                  padding: '1rem 1.25rem',
-                  background: link.style?.backgroundColor || '#3b82f6',
-                  color: link.style?.textColor || '#ffffff',
-                  border: link.style?.borderColor ? `1px solid ${link.style.borderColor}` : 'none',
-                  borderRadius: profile.theme.buttonStyle === 'rounded' ? '0.75rem' : 
-                             profile.theme.buttonStyle === 'pill' ? '2rem' : '0.375rem',
-                  fontSize: '1rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                  fontFamily: link.style?.font || profile.theme.fontFamily || 'Inter, sans-serif',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)'
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
-                }}
+                className="group relative w-full p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:scale-105 shadow-lg hover:shadow-xl"
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  {link.icon && (
-                    <span style={{ fontSize: '1.25rem' }}>{link.icon}</span>
-                  )}
-                  <span>{link.title}</span>
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-0 group-hover:opacity-25 transition duration-300"></div>
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {link.icon && (
+                      <span className="text-xl">{link.icon}</span>
+                    )}
+                    <span className="text-lg">{link.title}</span>
+                  </div>
+                  <ExternalLink className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <ExternalLink style={{ height: '1rem', width: '1rem', opacity: 0.7 }} />
               </button>
             ))}
         </div>
 
         {/* Irys Gateway Link */}
         {transactionId && (
-          <div style={{ 
-            textAlign: 'center',
-            marginBottom: '2rem',
-            padding: '1rem',
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '0.75rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              gap: '0.5rem',
-              marginBottom: '0.5rem'
-            }}>
-              <Database style={{ height: '1rem', width: '1rem' }} />
-              <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>
+          <div className="text-center mb-12 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+            <div className="flex items-center justify-center space-x-2 mb-3">
+              <Database className="w-5 h-5 text-emerald-400" />
+              <span className="text-emerald-300 font-semibold">
                 Stored on Irys Blockchain
               </span>
             </div>
@@ -413,43 +261,18 @@ const UsernameProfile: React.FC = () => {
               href={`https://devnet.irys.xyz/${transactionId}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.5rem 1rem',
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: profile.theme.textColor || '#1f2937',
-                textDecoration: 'none',
-                borderRadius: '0.375rem',
-                fontSize: '0.75rem',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-              }}
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 backdrop-blur-sm text-emerald-300 rounded-xl border border-emerald-400/30 hover:from-emerald-400/30 hover:to-teal-400/30 transition-all duration-200"
             >
-              <Globe style={{ height: '0.875rem', width: '0.875rem' }} />
-              View on Irys Gateway
+              <Globe className="w-4 h-4" />
+              <span>View on Irys Gateway</span>
             </a>
           </div>
         )}
 
         {/* Social Media */}
         {Object.values(profile.social).some(url => url) && (
-          <div style={{ 
-            textAlign: 'center',
-            marginBottom: '2rem'
-          }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              gap: '1rem',
-              flexWrap: 'wrap'
-            }}>
+          <div className="text-center mb-12">
+            <div className="flex justify-center space-x-4 flex-wrap">
               {Object.entries(profile.social).map(([platform, url]) => {
                 if (!url) return null
                 
@@ -481,29 +304,7 @@ const UsernameProfile: React.FC = () => {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '2.5rem',
-                      height: '2.5rem',
-                      background: 'rgba(255, 255, 255, 0.1)',
-                      borderRadius: '50%',
-                      color: profile.theme.textColor || '#1f2937',
-                      textDecoration: 'none',
-                      fontSize: '1.25rem',
-                      transition: 'all 0.2s',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.2)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'scale(1.1)'
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)'
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                    }}
+                    className="flex items-center justify-center w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full text-white text-xl transition-all duration-200 hover:bg-white/20 hover:scale-110 border border-white/20 hover:border-white/40"
                   >
                     {getIcon(platform)}
                   </a>
@@ -514,52 +315,23 @@ const UsernameProfile: React.FC = () => {
         )}
 
         {/* Action Buttons */}
-        <div style={{ 
-          textAlign: 'center',
-          marginBottom: '2rem'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: '1rem',
-            flexWrap: 'wrap'
-          }}>
+        <div className="text-center mb-12">
+          <div className="flex justify-center space-x-4 flex-wrap">
             <button
               onClick={shareProfile}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.5rem',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '0.5rem',
-                color: profile.theme.textColor || '#1f2937',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backdropFilter: 'blur(10px)',
-                fontWeight: '500',
-                fontSize: '0.875rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-              }}
+              className="flex items-center space-x-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white font-semibold transition-all duration-200 hover:bg-white/20 hover:scale-105"
             >
-              <Share2 style={{ height: '1rem', width: '1rem' }} />
-              Share
+              <Share2 className="w-4 h-4" />
+              <span>Share</span>
             </button>
 
             {profile.customization.enableDownloadVCard && (
               <button
                 onClick={() => {
-                  // Generate vCard
                   const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${profile.name}
-ORG:IrysLinkTree
+ORG:Irys Tree
 URL:${window.location.href}
 END:VCARD`
                   
@@ -571,51 +343,26 @@ END:VCARD`
                   a.click()
                   URL.revokeObjectURL(url)
                 }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.75rem 1.5rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '0.5rem',
-                  color: profile.theme.textColor || '#1f2937',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  backdropFilter: 'blur(10px)',
-                  fontWeight: '500',
-                  fontSize: '0.875rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                }}
+                className="flex items-center space-x-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white font-semibold transition-all duration-200 hover:bg-white/20 hover:scale-105"
               >
-                <Download style={{ height: '1rem', width: '1rem' }} />
-                Save Contact
+                <Download className="w-4 h-4" />
+                <span>Save Contact</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Footer */}
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '2rem 0',
-          opacity: 0.6,
-          fontSize: '0.75rem',
-          color: profile.theme.textColor || '#1f2937'
-        }}>
-          <div style={{ marginBottom: '0.5rem' }}>
-            Powered by <strong>IrysLinkTree</strong>
+        <div className="text-center py-8 border-t border-white/10">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <img 
+              src="https://pbs.twimg.com/profile_images/1879776802563891200/cdpcRzVY_400x400.jpg" 
+              alt="Irys Logo" 
+              className="w-6 h-6 rounded-lg"
+            />
+            <span className="text-emerald-300/70 font-semibold">Powered by Irys Tree</span>
           </div>
-          <div style={{ 
-            fontFamily: 'monospace',
-            fontSize: '0.625rem',
-            opacity: 0.8
-          }}>
+          <div className="text-emerald-300/50 text-xs font-mono">
             {transactionId ? `${transactionId.slice(0, 8)}...${transactionId.slice(-8)}` : 'Username Profile'}
           </div>
         </div>

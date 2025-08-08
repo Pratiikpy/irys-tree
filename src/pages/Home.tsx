@@ -1,396 +1,186 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Wallet, Plus, Search, Globe, Shield, Zap } from 'lucide-react'
+import { Wallet, Plus, Search, Globe, Shield, Zap, ArrowRight, Sparkles } from 'lucide-react'
 import { useWallet } from '@/contexts/WalletContext'
 
 const Home: React.FC = () => {
   const { wallet, connectWallet } = useWallet()
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
-    }}>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
       {/* Header */}
-      <header style={{ 
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
-        background: 'rgba(255, 255, 255, 0.05)', 
-        backdropFilter: 'blur(20px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}>
-        <div style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          padding: '1rem 2rem',
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between' 
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ 
-              height: '2.5rem', 
-              width: '2.5rem', 
-              borderRadius: '0.75rem', 
-              background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '1.125rem'
-            }}>
-              I
-            </div>
-            <h1 style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: '700', 
-              color: 'white',
-              letterSpacing: '-0.025em'
-            }}>
-              IrysLinkTree
-            </h1>
-          </div>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {wallet.isConnected ? (
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.75rem',
-                padding: '0.5rem 1rem',
-                background: 'rgba(255, 255, 255, 0.1)',
-                borderRadius: '0.5rem',
-                border: '1px solid rgba(255, 255, 255, 0.2)'
-              }}>
-                <div style={{ 
-                  height: '0.5rem', 
-                  width: '0.5rem', 
-                  borderRadius: '50%', 
-                  backgroundColor: '#10b981' 
-                }}></div>
-                <span style={{ 
-                  fontSize: '0.875rem', 
-                  color: 'white',
-                  fontWeight: '500'
-                }}>
-                  {wallet.address?.slice(0, 6)}...{wallet.address?.slice(-4)}
-                </span>
+      <header className="relative z-10 border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <img 
+                  src="https://pbs.twimg.com/profile_images/1879776802563891200/cdpcRzVY_400x400.jpg" 
+                  alt="Irys Logo" 
+                  className="w-10 h-10 rounded-xl shadow-lg"
+                />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full border-2 border-white"></div>
               </div>
-            ) : (
-              <button
-                onClick={connectWallet}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.75rem 1.5rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '0.5rem',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontWeight: '500',
-                  transition: 'all 0.2s',
-                  backdropFilter: 'blur(10px)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                }}
-              >
-                <Wallet style={{ height: '1rem', width: '1rem' }} />
-                <span>Connect Wallet</span>
-              </button>
-            )}
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                  Irys Tree
+                </h1>
+                <p className="text-xs text-emerald-300/70 -mt-1">Decentralized LinkTree</p>
+              </div>
+            </div>
+            
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-white/80 hover:text-white transition-colors">Features</a>
+              <a href="#about" className="text-white/80 hover:text-white transition-colors">About</a>
+              <Link to="/discover" className="text-white/80 hover:text-white transition-colors">Discover</Link>
+            </nav>
+
+            {/* Connect Wallet Button */}
+            <div className="flex items-center space-x-4">
+              {wallet.isConnected ? (
+                <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                  <span className="text-white text-sm font-medium">
+                    {wallet.address?.slice(0, 6)}...{wallet.address?.slice(-4)}
+                  </span>
+                </div>
+              ) : (
+                <button
+                  onClick={connectWallet}
+                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  <Wallet className="w-4 h-4" />
+                  <span>Connect Wallet</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        padding: '4rem 2rem',
-        textAlign: 'center'
-      }}>
-        <div>
-          <h1 style={{ 
-            fontSize: '3.5rem', 
-            fontWeight: '800', 
-            color: 'white', 
-            marginBottom: '1.5rem',
-            lineHeight: '1.1',
-            letterSpacing: '-0.025em'
-          }}>
-            Your Links,{' '}
-            <span style={{ 
-              background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>
-              Forever
-            </span>
-          </h1>
-          <p style={{ 
-            fontSize: '1.25rem', 
-            color: 'rgba(255, 255, 255, 0.9)', 
-            marginBottom: '3rem',
-            lineHeight: '1.6',
-            maxWidth: '600px',
-            margin: '0 auto 3rem'
-          }}>
-            Create permanent, decentralized LinkTree profiles using Irys programmable datachain.
-            <br />
-            <strong>No monthly fees. No censorship. True ownership.</strong>
-          </p>
-          
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: '1rem', 
-            marginBottom: '4rem',
-            flexWrap: 'wrap'
-          }}>
-            <Link
-              to="/create"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '1rem 2rem',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '0.75rem',
-                fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.2s',
-                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 8px 20px rgba(59, 130, 246, 0.4)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)'
-              }}
-            >
-              <Plus style={{ height: '1.25rem', width: '1.25rem' }} />
-              <span>Create Profile</span>
-            </Link>
-            <Link
-              to="/discover"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '1rem 2rem',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '0.75rem',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: 'white',
-                textDecoration: 'none',
-                transition: 'all 0.2s',
-                fontWeight: '600',
-                fontSize: '1rem',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-            >
-              <Search style={{ height: '1.25rem', width: '1.25rem' }} />
-              <span>Discover Profiles</span>
-            </Link>
-          </div>
-        </div>
+      <main className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+          <div className="text-center">
+            {/* Main Headline */}
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-8xl font-black text-white mb-6 leading-tight">
+                Everything you are.
+                <br />
+                <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                  In one, simple link.
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                Join the future of decentralized profiles. Create permanent, censorship-resistant LinkTree profiles 
+                powered by Irys programmable datachain.
+              </p>
+            </div>
 
-        {/* Features */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-          gap: '2rem',
-          marginTop: '4rem'
-        }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.2s'
-          }}>
-            <div style={{ 
-              height: '3rem', 
-              width: '3rem', 
-              borderRadius: '0.75rem', 
-              background: 'linear-gradient(135deg, #dbeafe 0%, #3b82f6 100%)',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Globe style={{ height: '1.5rem', width: '1.5rem', color: '#1d4ed8' }} />
+            {/* CTA Section */}
+            <div className="mb-16">
+              <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                  <Link
+                    to="/create"
+                    className="relative flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-200 hover:scale-105"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>Create Your Profile</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
+                </div>
+                
+                <Link
+                  to="/discover"
+                  className="flex items-center space-x-3 px-8 py-4 border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl text-lg hover:bg-white/20 transition-all duration-200 hover:scale-105"
+                >
+                  <Search className="w-5 h-5" />
+                  <span>Discover Profiles</span>
+                </Link>
+              </div>
             </div>
-            <h3 style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: '700', 
-              marginBottom: '0.75rem',
-              color: 'white'
-            }}>
-              Permanent Storage
-            </h3>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: '1.6'
-            }}>
-              Your profile never expires or gets deleted. Stored permanently on Irys datachain with cryptographic proof.
-            </p>
-          </div>
-          
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.2s'
-          }}>
-            <div style={{ 
-              height: '3rem', 
-              width: '3rem', 
-              borderRadius: '0.75rem', 
-              background: 'linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%)',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Shield style={{ height: '1.5rem', width: '1.5rem', color: '#d97706' }} />
-            </div>
-            <h3 style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: '700', 
-              marginBottom: '0.75rem',
-              color: 'white'
-            }}>
-              True Ownership
-            </h3>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: '1.6'
-            }}>
-              No centralized platform can remove your profile. You own your data completely with cryptographic verification.
-            </p>
-          </div>
-          
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.2s'
-          }}>
-            <div style={{ 
-              height: '3rem', 
-              width: '3rem', 
-              borderRadius: '0.75rem', 
-              background: 'linear-gradient(135deg, #dcfce7 0%, #10b981 100%)',
-              marginBottom: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Zap style={{ height: '1.5rem', width: '1.5rem', color: '#059669' }} />
-            </div>
-            <h3 style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: '700', 
-              marginBottom: '0.75rem',
-              color: 'white'
-            }}>
-              One-Time Payment
-            </h3>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: '1.6'
-            }}>
-              Pay once with crypto, own forever. No recurring monthly fees or hidden charges.
-            </p>
-          </div>
-        </div>
 
-        {/* Stats */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '1rem',
-          padding: '3rem 2rem',
-          marginTop: '4rem',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          backdropFilter: 'blur(10px)'
-        }}>
-          <h2 style={{ 
-            fontSize: '2rem', 
-            fontWeight: '700', 
-            textAlign: 'center',
-            marginBottom: '2rem',
-            color: 'white'
-          }}>
-            Platform Statistics
-          </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '2rem'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                color: '#3b82f6',
-                marginBottom: '0.5rem'
-              }}>1,234</div>
-              <div style={{ 
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontWeight: '500'
-              }}>Profiles Created</div>
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-20">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">
+                  1,234
+                </div>
+                <div className="text-white/70 font-medium">Profiles Created</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                  56,789
+                </div>
+                <div className="text-white/70 font-medium">Total Views</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-2">
+                  12,345
+                </div>
+                <div className="text-white/70 font-medium">Link Clicks</div>
+              </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                color: '#8b5cf6',
-                marginBottom: '0.5rem'
-              }}>56,789</div>
-              <div style={{ 
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontWeight: '500'
-              }}>Total Views</div>
+          </div>
+
+          {/* Features Grid */}
+          <div id="features" className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl flex items-center justify-center mb-6">
+                  <Globe className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Permanent Storage</h3>
+                <p className="text-white/80 leading-relaxed">
+                  Your profile never expires or gets deleted. Stored permanently on Irys datachain with cryptographic proof of authenticity.
+                </p>
+              </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: '800', 
-                color: '#10b981',
-                marginBottom: '0.5rem'
-              }}>12,345</div>
-              <div style={{ 
-                color: 'rgba(255, 255, 255, 0.8)',
-                fontWeight: '500'
-              }}>Link Clicks</div>
+
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-xl flex items-center justify-center mb-6">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">True Ownership</h3>
+                <p className="text-white/80 leading-relaxed">
+                  No centralized platform can remove your profile. You own your data completely with cryptographic verification.
+                </p>
+              </div>
+            </div>
+
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center mb-6">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">One-Time Payment</h3>
+                <p className="text-white/80 leading-relaxed">
+                  Pay once with crypto, own forever. No recurring monthly fees or hidden charges. True value for your money.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center mt-20">
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 backdrop-blur-sm rounded-full border border-white/20">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-400 font-semibold">Powered by Irys Datachain</span>
             </div>
           </div>
         </div>
