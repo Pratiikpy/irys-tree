@@ -164,11 +164,11 @@ const ProfileView: React.FC = () => {
           {/* Stats */}
           {profile.customization.showProfileViews && (
             <div className="flex justify-center space-x-8 text-emerald-300/70 text-sm">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
                 <Eye className="w-4 h-4" />
                 <span>{profile.metadata?.views || 0} views</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
                 <Heart className="w-4 h-4" />
                 <span>{profile.links.reduce((sum, link) => sum + (link.analytics?.clicks || 0), 0)} clicks</span>
               </div>
