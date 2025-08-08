@@ -107,7 +107,7 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
 
       return {
         transactionId: receipt.id,
-        url: `https://gateway.irys.xyz/${receipt.id}`,
+        url: `https://devnet.irys.xyz/${receipt.id}`,
         receipt
       }
 
@@ -121,7 +121,8 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
   // Fetch profile from Irys
   const fetchProfile = async (transactionId: string) => {
     try {
-      const response = await fetch(`https://gateway.irys.xyz/${transactionId}`)
+      // Use the correct Irys devnet gateway URL
+      const response = await fetch(`https://devnet.irys.xyz/${transactionId}`)
       if (!response.ok) {
         throw new Error('Profile not found')
       }
