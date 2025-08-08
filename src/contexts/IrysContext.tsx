@@ -12,6 +12,7 @@ interface IrysContextType {
   getBalance: () => Promise<string>
   fundAccount: (amount: string) => Promise<void>
   fetchProfile: (transactionId: string) => Promise<any>
+  fetchProfileByUsername: (username: string) => Promise<any>
 }
 
 const IrysContext = createContext<IrysContextType | undefined>(undefined)
@@ -97,11 +98,15 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
         { name: "Profile-Type", value: "linktree" },
         { name: "Creator", value: walletAddress },
         { name: "Name", value: profileData.name },
+        { name: "Username", value: profileData.username }, // Add username tag
         { name: "Public", value: profileData.metadata.isPublic ? "true" : "false" }
       ]
 
       // Upload to Irys testnet
       const receipt = await irys.uploader.upload(JSON.stringify(profileWithMetadata), { tags })
+
+      // Store username mapping
+      await storeUsernameMapping(profileData.username, receipt.id)
 
       setIrys(prev => ({ ...prev, isUploading: false }))
 
@@ -114,6 +119,103 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Error uploading profile:', error)
       setIrys(prev => ({ ...prev, isUploading: false }))
+      throw error
+    }
+  }
+
+  // Store username to transactionId mapping
+  const storeUsernameMapping = async (username: string, transactionId: string) => {
+    try {
+      if (!irys.uploader) {
+        throw new Error('Irys not connected')
+      }
+
+      const mappingData = {
+        username,
+        transactionId,
+        timestamp: Date.now()
+      }
+
+      const tags = [
+        { name: "Content-Type", value: "application/json" },
+        { name: "App-Name", value: "IrysLinkTree" },
+        { name: "Mapping-Type", value: "username-to-transaction" },
+        { name: "Username", value: username }
+      ]
+
+      await irys.uploader.upload(JSON.stringify(mappingData), { tags })
+    } catch (error) {
+      console.error('Error storing username mapping:', error)
+      // Don't throw error here as it's not critical for profile creation
+    }
+  }
+
+  // Fetch profile by username
+  const fetchProfileByUsername = async (username: string) => {
+    try {
+      // First, try to find the username mapping
+      const mappingResponse = await fetch(`https://devnet.irys.xyz/graphql`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              transactions(
+                tags: [
+                  { name: "App-Name", values: ["IrysLinkTree"] }
+                  { name: "Mapping-Type", values: ["username-to-transaction"] }
+                  { name: "Username", values: ["${username}"] }
+                ]
+                first: 1
+                order: DESC
+              ) {
+                edges {
+                  node {
+                    id
+                    tags {
+                      name
+                      value
+                    }
+                  }
+                }
+              }
+            }
+          `
+        })
+      })
+
+      if (!mappingResponse.ok) {
+        throw new Error('Failed to fetch username mapping')
+      }
+
+      const mappingData = await mappingResponse.json()
+      
+      if (!mappingData.data?.transactions?.edges?.length) {
+        throw new Error('Username not found')
+      }
+
+      const mappingTransactionId = mappingData.data.transactions.edges[0].node.id
+      
+      // Fetch the mapping data
+      const mappingResponse2 = await fetch(`https://devnet.irys.xyz/${mappingTransactionId}`)
+      if (!mappingResponse2.ok) {
+        throw new Error('Failed to fetch mapping data')
+      }
+
+      const mapping = await mappingResponse2.json()
+      const transactionId = mapping.transactionId
+
+      // Now fetch the actual profile using the transactionId
+      const profileResponse = await fetch(`https://devnet.irys.xyz/${transactionId}`)
+      if (!profileResponse.ok) {
+        throw new Error('Profile not found')
+      }
+
+      return await profileResponse.json()
+    } catch (error) {
+      console.error('Error fetching profile by username:', error)
       throw error
     }
   }
@@ -184,7 +286,8 @@ export const IrysProvider: React.FC<IrysProviderProps> = ({ children }) => {
     uploadProfile,
     getBalance,
     fundAccount,
-    fetchProfile
+    fetchProfile,
+    fetchProfileByUsername
   }
 
   return (
