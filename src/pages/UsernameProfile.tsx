@@ -53,13 +53,26 @@ const UsernameProfile: React.FC = () => {
 
   const handleLinkClick = async (linkId: string, url: string) => {
     try {
+      // Ensure URL has protocol
+      let formattedUrl = url
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        formattedUrl = 'https://' + url
+      }
+      
+      console.log('Opening URL:', formattedUrl) // Debug log
+      
       if (transactionId) {
         await trackLinkClick(transactionId, linkId)
       }
-      window.open(url, '_blank', 'noopener,noreferrer')
+      window.open(formattedUrl, '_blank', 'noopener,noreferrer')
     } catch (error) {
       console.error('Error tracking link click:', error)
-      window.open(url, '_blank', 'noopener,noreferrer')
+      // Fallback: ensure URL has protocol
+      let formattedUrl = url
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        formattedUrl = 'https://' + url
+      }
+      window.open(formattedUrl, '_blank', 'noopener,noreferrer')
     }
   }
 

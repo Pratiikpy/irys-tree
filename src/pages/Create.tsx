@@ -116,16 +116,32 @@ const Create: React.FC = () => {
   const updateLink = (id: string, field: keyof ProfileLink, value: string | boolean) => {
     setProfile(prev => ({
       ...prev,
-      links: prev.links.map(link => 
-        link.id === id ? { ...link, [field]: value } : link
-      )
+      links: prev.links.map(link => {
+        if (link.id === id) {
+          if (field === 'url' && typeof value === 'string') {
+            // Ensure URL has protocol
+            let formattedUrl = value
+            if (value && !value.startsWith('http://') && !value.startsWith('https://') && !value.startsWith('mailto:') && !value.startsWith('tel:')) {
+              formattedUrl = 'https://' + value
+            }
+            return { ...link, [field]: formattedUrl }
+          }
+          return { ...link, [field]: value }
+        }
+        return link
+      })
     }))
   }
 
   const updateSocial = (platform: keyof SocialLinks, value: string) => {
     setProfile(prev => ({
       ...prev,
-      social: { ...prev.social, [platform]: value }
+      social: { 
+        ...prev.social, 
+        [platform]: value && !value.startsWith('http://') && !value.startsWith('https://') && !value.startsWith('mailto:') && !value.startsWith('tel:') 
+          ? 'https://' + value 
+          : value 
+      }
     }))
   }
 
