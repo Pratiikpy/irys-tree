@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import LoadingSpinner from './components/shared/LoadingSpinner'
+import { Layout } from '@/components/layout/Layout'
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'))
@@ -16,7 +17,7 @@ const Help = lazy(() => import('./pages/Help'))
 
 function App() {
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -32,8 +33,8 @@ function App() {
           <Route path="/:username" element={<UsernameProfile />} />
         </Routes>
       </Suspense>
-    </div>
+    </Layout>
   )
 }
 
-export default App 
+export default App
