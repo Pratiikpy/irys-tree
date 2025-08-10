@@ -15,7 +15,7 @@ const Create: React.FC = () => {
   const [profile, setProfile] = useState<IrysProfile>({
     version: "1.0",
     name: "",
-    username: "", // Add username field
+    username: "",
     bio: "",
     avatar: "",
     links: [
@@ -26,42 +26,24 @@ const Create: React.FC = () => {
         icon: "🌐", 
         isActive: true,
         order: 1,
-        style: {
-          backgroundColor: "#3b82f6",
-          textColor: "#ffffff",
-          borderRadius: 8,
-          font: "Inter"
-        },
-        analytics: {
-          clicks: 0
-        }
+        style: { backgroundColor: "#39e09b", textColor: "#000000", borderRadius: 12, font: "Inter" },
+        analytics: { clicks: 0 }
       }
     ],
     theme: {
       backgroundType: "color",
       backgroundColor: "#ffffff",
       fontFamily: "Inter",
-      textColor: "#1f2937",
+      textColor: "#111827",
       buttonStyle: "rounded",
-      buttonColor: "#3b82f6",
-      buttonTextColor: "#ffffff",
+      buttonColor: "#39e09b",
+      buttonTextColor: "#000000",
       layout: "center",
       spacing: "normal",
       animations: true
     },
-    customization: {
-      showProfileViews: true,
-      showVerificationBadge: false,
-      enableDownloadVCard: false
-    },
-    social: {
-      twitter: "",
-      instagram: "",
-      linkedin: "",
-      github: "",
-      youtube: "",
-      tiktok: ""
-    },
+    customization: { showProfileViews: true, showVerificationBadge: false, enableDownloadVCard: false },
+    social: { twitter: "", instagram: "", linkedin: "", github: "", youtube: "", tiktok: "" },
     settings: {
       isPublic: true,
       allowSearch: true,
@@ -73,13 +55,7 @@ const Create: React.FC = () => {
       passwordProtected: false,
       ageRestricted: false
     },
-    metadata: {
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      creator: wallet.address || "",
-      views: 0,
-      isPublic: true
-    }
+    metadata: { createdAt: Date.now(), updatedAt: Date.now(), creator: wallet.address || "", views: 0, isPublic: true }
   })
 
   const addLink = () => {
@@ -90,27 +66,14 @@ const Create: React.FC = () => {
       icon: "🔗",
       isActive: true,
       order: profile.links.length + 1,
-      style: {
-        backgroundColor: "#3b82f6",
-        textColor: "#ffffff",
-        borderRadius: 8,
-        font: "Inter"
-      },
-      analytics: {
-        clicks: 0
-      }
+      style: { backgroundColor: "#39e09b", textColor: "#000000", borderRadius: 12, font: "Inter" },
+      analytics: { clicks: 0 }
     }
-    setProfile(prev => ({
-      ...prev,
-      links: [...prev.links, newLink]
-    }))
+    setProfile(prev => ({ ...prev, links: [...prev.links, newLink] }))
   }
 
   const removeLink = (id: string) => {
-    setProfile(prev => ({
-      ...prev,
-      links: prev.links.filter(link => link.id !== id)
-    }))
+    setProfile(prev => ({ ...prev, links: prev.links.filter(l => l.id !== id) }))
   }
 
   const updateLink = (id: string, field: keyof ProfileLink, value: string | boolean) => {
@@ -119,7 +82,6 @@ const Create: React.FC = () => {
       links: prev.links.map(link => {
         if (link.id === id) {
           if (field === 'url' && typeof value === 'string') {
-            // Ensure URL has protocol
             let formattedUrl = value
             if (value && !value.startsWith('http://') && !value.startsWith('https://') && !value.startsWith('mailto:') && !value.startsWith('tel:')) {
               formattedUrl = 'https://' + value
@@ -146,45 +108,22 @@ const Create: React.FC = () => {
   }
 
   const updateTheme = (field: keyof ProfileTheme, value: string) => {
-    setProfile(prev => ({
-      ...prev,
-      theme: { ...prev.theme, [field]: value }
-    }))
+    setProfile(prev => ({ ...prev, theme: { ...prev.theme, [field]: value } }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!wallet.isConnected) {
-      alert('Please connect your wallet first')
-      return
-    }
+    if (!wallet.isConnected) return alert('Please connect your wallet first')
+    if (!profile.name.trim()) return alert('Please enter a profile name')
+    if (!profile.username.trim()) return alert('Please enter a username')
 
-    if (!profile.name.trim()) {
-      alert('Please enter a profile name')
-      return
-    }
-
-    if (!profile.username.trim()) {
-      alert('Please enter a username')
-      return
-    }
-
-    // Validate username format
     const usernameRegex = /^[a-z0-9-]+$/
-    if (!usernameRegex.test(profile.username)) {
-      alert('Username can only contain letters, numbers, and hyphens')
-      return
-    }
+    if (!usernameRegex.test(profile.username)) return alert('Username can only contain letters, numbers, and hyphens')
 
     setIsLoading(true)
     try {
-      // Add transaction ID to metadata after upload
       const result = await uploadProfile(profile, wallet.address!)
-      
-      alert(`Profile created successfully! Your profile is now available at: irys-tree.vercel.app/${profile.username}\n\nTransaction ID: ${result.transactionId}`)
-      
-      // Navigate to username-based URL
+      alert(`Profile created! Transaction ID: ${result.transactionId}`)
       navigate(`/${profile.username}`)
     } catch (error) {
       console.error('Error creating profile:', error)
@@ -195,332 +134,117 @@ const Create: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-      {/* Header */}
-      <header style={{ 
-        borderBottom: '1px solid #e5e7eb', 
-        background: 'rgba(255, 255, 255, 0.9)', 
-        backdropFilter: 'blur(8px)'
-      }}>
-        <div className="container" style={{ padding: '1rem 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <button
-                onClick={() => navigate('/')}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.5rem',
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer',
-                  color: '#6b7280'
-                }}
-              >
-                <ArrowLeft style={{ height: '1rem', width: '1rem' }} />
-                Back
-              </button>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>
-                {transactionId ? 'Edit Profile' : 'Create Profile'}
-              </h1>
-            </div>
-            
-            <button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="btn btn-primary"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            >
-              <Save style={{ height: '1rem', width: '1rem' }} />
-              {isLoading ? 'Creating...' : 'Save Profile'}
+    <div className="bg-background min-h-screen">
+      <header className="border-b">
+        <div className="container-section h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate('/')} className="text-sm text-foreground/70 hover:text-foreground flex items-center gap-1">
+              <ArrowLeft className="h-4 w-4" /> Back
             </button>
+            <h1 className="text-lg font-semibold">{transactionId ? 'Edit profile' : 'Create profile'}</h1>
           </div>
+          <button onClick={handleSubmit} disabled={isLoading} className="btn btn-primary">
+            <Save className="h-4 w-4 mr-2" /> {isLoading ? 'Saving…' : 'Save profile'}
+          </button>
         </div>
       </header>
 
-      <main className="container" style={{ padding: '2rem 0' }}>
-        <form onSubmit={handleSubmit} style={{ maxWidth: '800px', margin: '0 auto' }}>
-          
-          {/* Basic Info Section */}
-          <div className="card" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <User style={{ height: '1.25rem', width: '1.25rem' }} />
-              Basic Information
-            </h2>
-            
-            <div style={{ display: 'grid', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Profile Name *
-                </label>
-                <input
-                  type="text"
-                  value={profile.name}
-                  onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter your name"
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.375rem',
-                    fontSize: '1rem'
-                  }}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Username *
-                </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>irys-tree.vercel.app/</span>
+      <main className="container-section py-8">
+        <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-6">
+          {/* Basic */}
+          <div className="card p-6">
+            <h2 className="font-semibold mb-4 flex items-center gap-2"><User className="h-4 w-4" /> Basic information</h2>
+            <div className="grid gap-4">
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Profile name *</span>
+                <input value={profile.name} onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))} className="h-11 rounded-xl border px-3" placeholder="Enter your name" required />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Username *</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-foreground/60">irystree.app/</span>
                   <input
-                    type="text"
                     value={profile.username}
-                    onChange={(e) => setProfile(prev => ({ 
-                      ...prev, 
-                      username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') 
-                    }))}
+                    onChange={(e) => setProfile(prev => ({ ...prev, username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
+                    className="h-11 flex-1 rounded-xl border px-3"
                     placeholder="your-username"
-                    style={{
-                      flex: 1,
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.375rem',
-                      fontSize: '1rem'
-                    }}
                     required
                   />
                 </div>
-                <p style={{ 
-                  fontSize: '0.75rem', 
-                  color: '#6b7280', 
-                  marginTop: '0.25rem' 
-                }}>
-                  Only letters, numbers, and hyphens allowed. This will be your unique URL.
-                </p>
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Bio
-                </label>
-                <textarea
-                  value={profile.bio}
-                  onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
-                  placeholder="Tell people about yourself..."
-                  rows={3}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.375rem',
-                    fontSize: '1rem',
-                    resize: 'vertical'
-                  }}
-                />
-              </div>
+                <p className="text-xs text-foreground/60">Only letters, numbers, and hyphens.</p>
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Bio</span>
+                <textarea value={profile.bio} onChange={(e) => setProfile(p => ({ ...p, bio: e.target.value }))} rows={3} className="rounded-xl border px-3 py-2" placeholder="Tell people about yourself" />
+              </label>
             </div>
           </div>
 
-          {/* Links Section */}
-          <div className="card" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <LinkIcon style={{ height: '1.25rem', width: '1.25rem' }} />
-              Your Links
-            </h2>
-            
-            <div style={{ display: 'grid', gap: '1rem' }}>
+          {/* Links */}
+          <div className="card p-6">
+            <h2 className="font-semibold mb-4 flex items-center gap-2"><LinkIcon className="h-4 w-4" /> Your links</h2>
+            <div className="space-y-3">
               {profile.links.map((link) => (
-                <div key={link.id} style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: '1fr 1fr auto auto', 
-                  gap: '0.5rem',
-                  alignItems: 'center',
-                  padding: '1rem',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '0.375rem'
-                }}>
-                  <input
-                    type="text"
-                    value={link.title}
-                    onChange={(e) => updateLink(link.id, 'title', e.target.value)}
-                    placeholder="Link title"
-                    style={{
-                      padding: '0.5rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.25rem'
-                    }}
-                  />
-                  <input
-                    type="url"
-                    value={link.url}
-                    onChange={(e) => updateLink(link.id, 'url', e.target.value)}
-                    placeholder="https://"
-                    style={{
-                      padding: '0.5rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.25rem'
-                    }}
-                  />
-                  <input
-                    type="text"
-                    value={link.icon}
-                    onChange={(e) => updateLink(link.id, 'icon', e.target.value)}
-                    placeholder="🎯"
-                    style={{
-                      padding: '0.5rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.25rem',
-                      width: '60px'
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeLink(link.id)}
-                    style={{
-                      padding: '0.5rem',
-                      border: 'none',
-                      background: '#ef4444',
-                      color: 'white',
-                      borderRadius: '0.25rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <Trash2 style={{ height: '1rem', width: '1rem' }} />
-                  </button>
+                <div key={link.id} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
+                  <input value={link.title} onChange={(e) => updateLink(link.id, 'title', e.target.value)} className="h-11 rounded-xl border px-3" placeholder="Link title" />
+                  <input value={link.url} onChange={(e) => updateLink(link.id, 'url', e.target.value)} className="h-11 rounded-xl border px-3 md:col-span-2" placeholder="https://" />
+                  <div className="flex items-center gap-2">
+                    <input value={link.icon} onChange={(e) => updateLink(link.id, 'icon', e.target.value)} className="h-11 w-20 rounded-xl border px-3" placeholder="🎯" />
+                    <button type="button" onClick={() => removeLink(link.id)} className="btn bg-destructive text-destructive-foreground">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
-              
-              <button
-                type="button"
-                onClick={addLink}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.75rem',
-                  border: '1px dashed #d1d5db',
-                  background: 'none',
-                  borderRadius: '0.375rem',
-                  cursor: 'pointer',
-                  color: '#6b7280'
-                }}
-              >
-                <Plus style={{ height: '1rem', width: '1rem' }} />
-                Add Link
+              <button type="button" onClick={addLink} className="btn border w-full md:w-auto">
+                <Plus className="h-4 w-4 mr-2" /> Add link
               </button>
             </div>
           </div>
 
-          {/* Social Media Section */}
-          <div className="card" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <Globe style={{ height: '1.25rem', width: '1.25rem' }} />
-              Social Media
-            </h2>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          {/* Social */}
+          <div className="card p-6">
+            <h2 className="font-semibold mb-4 flex items-center gap-2"><Globe className="h-4 w-4" /> Social media</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
               {Object.entries(profile.social).map(([platform, value]) => (
-                <div key={platform}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', textTransform: 'capitalize' }}>
-                    {platform}
-                  </label>
-                  <input
-                    type="url"
-                    value={value}
-                    onChange={(e) => updateSocial(platform as keyof SocialLinks, e.target.value)}
-                    placeholder={`https://${platform}.com/username`}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.375rem'
-                    }}
-                  />
-                </div>
+                <label key={platform} className="grid gap-2">
+                  <span className="text-sm font-medium capitalize">{platform}</span>
+                  <input value={value as string} onChange={(e) => updateSocial(platform as keyof SocialLinks, e.target.value)} className="h-11 rounded-xl border px-3" placeholder={`https://${platform}.com/username`} />
+                </label>
               ))}
             </div>
           </div>
 
-          {/* Theme Section */}
-          <div className="card" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <Palette style={{ height: '1.25rem', width: '1.25rem' }} />
-              Theme & Appearance
-            </h2>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Button Color
-                </label>
-                <input
-                  type="color"
-                  value={profile.theme.buttonColor}
-                  onChange={(e) => updateTheme('buttonColor', e.target.value)}
-                  style={{ width: '100%', height: '40px' }}
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Background Color
-                </label>
-                <input
-                  type="color"
-                  value={profile.theme.backgroundColor}
-                  onChange={(e) => updateTheme('backgroundColor', e.target.value)}
-                  style={{ width: '100%', height: '40px' }}
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                  Text Color
-                </label>
-                <input
-                  type="color"
-                  value={profile.theme.textColor}
-                  onChange={(e) => updateTheme('textColor', e.target.value)}
-                  style={{ width: '100%', height: '40px' }}
-                />
-              </div>
+          {/* Theme */}
+          <div className="card p-6">
+            <h2 className="font-semibold mb-4 flex items-center gap-2"><Palette className="h-4 w-4" /> Theme & appearance</h2>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Button color</span>
+                <input type="color" value={profile.theme.buttonColor} onChange={(e) => updateTheme('buttonColor', e.target.value)} className="h-11 rounded-xl border" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Background color</span>
+                <input type="color" value={profile.theme.backgroundColor} onChange={(e) => updateTheme('backgroundColor', e.target.value)} className="h-11 rounded-xl border" />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-medium">Text color</span>
+                <input type="color" value={profile.theme.textColor} onChange={(e) => updateTheme('textColor', e.target.value)} className="h-11 rounded-xl border" />
+              </label>
             </div>
           </div>
 
-          {/* Settings Section */}
-          <div className="card">
-            <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <Settings style={{ height: '1.25rem', width: '1.25rem' }} />
-              Settings
-            </h2>
-            
-            <div style={{ display: 'grid', gap: '1rem' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input
-                  type="checkbox"
-                  checked={profile.settings.isPublic}
-                  onChange={(e) => setProfile(prev => ({
-                    ...prev,
-                    settings: { ...prev.settings, isPublic: e.target.checked }
-                  }))}
-                />
-                Make profile public
+          {/* Settings */}
+          <div className="card p-6">
+            <h2 className="font-semibold mb-4 flex items-center gap-2"><Settings className="h-4 w-4" /> Settings</h2>
+            <div className="space-y-3">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" checked={profile.settings.isPublic} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, isPublic: e.target.checked } }))} />
+                <span>Make profile public</span>
               </label>
-              
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input
-                  type="checkbox"
-                  checked={profile.settings.enableAnalytics}
-                  onChange={(e) => setProfile(prev => ({
-                    ...prev,
-                    settings: { ...prev.settings, enableAnalytics: e.target.checked }
-                  }))}
-                />
-                Enable analytics
+              <label className="flex items-center gap-2">
+                <input type="checkbox" checked={profile.settings.enableAnalytics} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, enableAnalytics: e.target.checked } }))} />
+                <span>Enable analytics</span>
               </label>
             </div>
           </div>
@@ -530,4 +254,4 @@ const Create: React.FC = () => {
   )
 }
 
-export default Create 
+export default Create
