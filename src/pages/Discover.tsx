@@ -158,7 +158,7 @@ const Discover: React.FC = () => {
                       </div>
                       <div>
                         <div className="font-medium">{r.profile.name}</div>
-                        <div className="text-sm text-foreground/60 line-clamp-1">{r.profile.bio}</div>
+                        <div className="text-sm text-foreground/60 truncate">{r.profile.bio}</div>
                       </div>
                     </div>
                     <Link to={`/p/${r.transactionId}`} className="btn btn-primary">View</Link>
