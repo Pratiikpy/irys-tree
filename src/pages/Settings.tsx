@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Settings as SettingsIcon, User, Shield, Globe, Download } from 'lucide-react'
+import { ArrowLeft, Settings as SettingsIcon, User, Globe } from 'lucide-react'
 import { useWallet } from '@/contexts/WalletContext'
 import { useIrys } from '@/contexts/IrysContext'
 
