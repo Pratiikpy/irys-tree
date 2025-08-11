@@ -57,7 +57,7 @@ const PhonePreview: React.FC<PhonePreviewProps> = ({ profile }) => {
 
             {/* Links */}
             <div className="space-y-3">
-              {profile.links.filter(link => link.isActive).map((link, index) => (
+              {profile.links.filter(link => link.isActive).map((link) => (
                 <div
                   key={link.id}
                   className="p-4 rounded-xl flex items-center justify-between shadow-sm transition-transform hover:scale-[0.98] cursor-pointer"
