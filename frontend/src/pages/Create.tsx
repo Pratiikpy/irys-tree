@@ -4,6 +4,7 @@ import { Plus, Trash2, Save, ArrowLeft, Palette, Link as LinkIcon, User, Globe, 
 import { useWallet } from '@/contexts/WalletContext'
 import { useIrys } from '@/contexts/IrysContext'
 import { IrysProfile, ProfileLink, ProfileTheme, SocialLinks } from '@/types'
+import PhonePreview from '@/components/shared/PhonePreview'
 
 const Create: React.FC = () => {
   const navigate = useNavigate()
