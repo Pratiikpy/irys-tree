@@ -151,7 +151,9 @@ const Create: React.FC = () => {
       </header>
 
       <main className="container-section py-8">
-        <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-6">
+        <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-8 items-start">
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="space-y-6 order-2 lg:order-1">
           {/* Basic */}
           <div className="card p-6">
             <h2 className="font-semibold mb-4 flex items-center gap-2"><User className="h-4 w-4" /> Basic information</h2>
