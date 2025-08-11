@@ -34,10 +34,12 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT || '5173'),
     host: '0.0.0.0',
+    allowedHosts: true, // allow all hosts for dev behind proxies
   },
   preview: {
     port: parseInt(process.env.PORT || '4173'),
     host: '0.0.0.0',
+    allowedHosts: true, // allow preview host (e.g., *.preview.emergentagent.com)
   },
   build: {
     outDir: 'dist',
@@ -51,4 +53,4 @@ export default defineConfig({
       },
     },
   },
-}) 
+})
