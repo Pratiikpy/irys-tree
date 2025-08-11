@@ -74,6 +74,18 @@ html, body, #root {
   }
 }
 
+@keyframes floatSlow {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(6deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.ambient-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: -9; }
+.ambient-bg .blob { position: absolute; width: 60vw; height: 60vw; border-radius: 9999px; filter: blur(80px); opacity: 0.18; animation: floatSlow 16s ease-in-out infinite; }
+.ambient-bg .blob-1 { top: -12%; left: -12%; background: radial-gradient(closest-side, rgba(56,189,248,0.55), rgba(56,189,248,0.0) 70%); }
+.ambient-bg .blob-2 { bottom: -18%; right: -10%; background: radial-gradient(closest-side, rgba(16,185,129,0.55), rgba(16,185,129,0.0) 70%); animation-delay: 4s; }
+.ambient-bg .blob-3 { top: 18%; right: 15%; width: 40vw; height: 40vw; background: radial-gradient(closest-side, rgba(168,85,247,0.55), rgba(168,85,247,0.0) 70%); animation-delay: 8s; }
+
 @layer components {
   .container-section {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
