@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, XCircle, Shield, FileText, Hash } from 'lucide-react'
+import { ArrowLeft, CheckCircle, XCircle, FileText, Hash } from 'lucide-react'
 import { useIrys } from '@/contexts/IrysContext'
 
 interface VerificationResult {
