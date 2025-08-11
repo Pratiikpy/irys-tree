@@ -17,6 +17,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <div className="relative min-h-screen flex flex-col">
       {/* Decorative background (non-interactive) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        {/* Ambient blobs for a cool, soft glow */}
+        <div className="ambient-bg">
+          <div className="blob blob-1" />
+          <div className="blob blob-2" />
+          <div className="blob blob-3" />
+        </div>
         {/* Image layer */}
         <div
           className="absolute inset-0"
@@ -25,12 +31,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center top',
-            opacity: 0.08,
-            filter: 'blur(2px)'
+            opacity: 0.06,
+            filter: 'blur(1.5px)'
           }}
         />
         {/* Gradient wash to keep content readable in both themes */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/88 to-background" />
       </div>
 
       {showChrome && <SiteHeader />}
