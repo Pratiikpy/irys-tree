@@ -257,7 +257,7 @@ const Create: React.FC = () => {
         </div>
         
         {/* Preview Section */}
-        <div className="flex-1 xl:w-1/2 bg-blue-50 p-4">
+        <div className="flex-1 xl:w-1/2">
           <div className="sticky top-8">
             <PhonePreview profile={profile} />
           </div>
