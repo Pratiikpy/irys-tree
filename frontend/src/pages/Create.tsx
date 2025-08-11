@@ -252,6 +252,12 @@ const Create: React.FC = () => {
             </div>
           </div>
         </form>
+        
+        {/* Preview Section */}
+        <div className="order-1 lg:order-2 lg:sticky lg:top-8">
+          <PhonePreview profile={profile} />
+        </div>
+      </div>
       </main>
     </div>
   )
