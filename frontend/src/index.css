@@ -10,6 +10,10 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 47.4% 11.2%;
 
+@media (prefers-reduced-motion: reduce) {
+  .ambient-bg .blob { animation: none; }
+}
+
   /* Linktree-like green */
   --primary: 154 73% 55%; /* #39e09b */
   --primary-foreground: 0 0% 0%;
