@@ -10,8 +10,29 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const first = pathname.split('/')[1] || ''
   const showChrome = SITE_ROUTES.has(first)
 
+  // Subtle, aesthetic background image across the app
+  const bgUrl = "https://irys-xyz.notion.site/image/attachment%3Aabfe4386-4462-4981-855e-91a5a4b0ce3a%3AFrame_48096688.png?table=block&id=199e9455-e498-80bc-be21-ec03d178d258&spaceId=805c8ee6-d632-43a5-bb85-5b1e2e4a9000&width=1310&userId=&cache=v2"
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col">
+      {/* Decorative background (non-interactive) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        {/* Image layer */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url('${bgUrl}')`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            opacity: 0.08,
+            filter: 'blur(2px)'
+          }}
+        />
+        {/* Gradient wash to keep content readable in both themes */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
+      </div>
+
       {showChrome && <SiteHeader />}
       <main className="flex-1">{children}</main>
       {showChrome && <SiteFooter />}
