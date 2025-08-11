@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ExternalLink, Share2, Eye, Heart, Download, ArrowLeft, Globe, Database } from 'lucide-react'
+import { ExternalLink, Share2, Eye, Heart, ArrowLeft, Globe } from 'lucide-react'
 import { useIrys } from '@/contexts/IrysContext'
 import { useAnalytics } from '@/contexts/AnalyticsContext'
 import { IrysProfile } from '@/types'
