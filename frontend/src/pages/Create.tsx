@@ -154,7 +154,7 @@ const Create: React.FC = () => {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col xl:flex-row gap-8">
             {/* Form Section */}
-            <div className="flex-1 xl:w-1/2 bg-red-50 p-4">
+            <div className="flex-1 xl:w-1/2">
               <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic */}
           <div className="card p-6">
