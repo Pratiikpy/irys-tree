@@ -27,7 +27,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url('${bgUrl}')`,
+            // Prefer locally hosted asset if present; gracefully fallback to remote
+            backgroundImage: `url('/irys-bg.png'), url('${bgUrl}')`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center top',
