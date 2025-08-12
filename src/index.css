@@ -90,4 +90,21 @@ html, body, #root {
   .btn-ghost {
     @apply bg-transparent text-foreground hover:bg-secondary;
   }
+
+  /* Ensure form inputs are always readable */
+  input, textarea {
+    @apply text-foreground placeholder:text-muted-foreground bg-background border-input;
+    color: #111827 !important; /* Force dark text in light mode */
+    background-color: #ffffff !important; /* White background for readability */
+  }
+  .dark input, .dark textarea {
+    color: #f9fafb !important; /* Light text in dark mode */
+    background-color: #1f2937 !important; /* Dark background in dark mode */
+  }
+  input:focus, textarea:focus {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #6b7280 !important; /* Visible placeholder */
+  }
 }
