@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Plus, Trash2, Save, ArrowLeft, Palette, Link as LinkIcon, User, Globe, Settings } from 'lucide-react'
+import { Plus, Trash2, Save, ArrowLeft, Palette, Link as LinkIcon, User, Globe, Settings, Image as ImageIcon } from 'lucide-react'
 import { useWallet } from '@/contexts/WalletContext'
 import { useIrys } from '@/contexts/IrysContext'
 import { IrysProfile, ProfileLink, ProfileTheme, SocialLinks } from '@/types'
 import PhonePreview from '@/components/shared/PhonePreview'
+
+const DEFAULT_AVATAR = 'https://pbs.twimg.com/profile_images/1879776802563891200/cdpcRzVY_400x400.jpg'
 
 const Create: React.FC = () => {
   const navigate = useNavigate()
@@ -18,7 +20,7 @@ const Create: React.FC = () => {
     name: "",
     username: "",
     bio: "",
-    avatar: "",
+    avatar: DEFAULT_AVATAR,
     links: [
       { 
         id: "1", 
@@ -156,113 +158,125 @@ const Create: React.FC = () => {
             {/* Form Section */}
             <div className="flex-1 xl:w-1/2">
               <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic */}
-          <div className="card p-6">
-            <h2 className="font-semibold mb-4 flex items-center gap-2"><User className="h-4 w-4" /> Basic information</h2>
-            <div className="grid gap-4">
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Profile name *</span>
-                <input value={profile.name} onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))} className="h-11 rounded-xl border px-3" placeholder="Enter your name" required />
-              </label>
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Username *</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-foreground/60">irystree.app/</span>
-                  <input
-                    value={profile.username}
-                    onChange={(e) => setProfile(prev => ({ ...prev, username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
-                    className="h-11 flex-1 rounded-xl border px-3"
-                    placeholder="your-username"
-                    required
-                  />
+                {/* Basic */}
+                <div className="card p-6">
+                  <h2 className="font-semibold mb-4 flex items-center gap-2"><User className="h-4 w-4" /> Basic information</h2>
+                  <div className="grid gap-4">
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Profile name *</span>
+                      <input value={profile.name} onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))} className="h-11 rounded-xl border px-3" placeholder="Enter your name" required />
+                    </label>
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Username *</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-foreground/60">irystree.app/</span>
+                        <input
+                          value={profile.username}
+                          onChange={(e) => setProfile(prev => ({ ...prev, username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
+                          className="h-11 flex-1 rounded-xl border px-3"
+                          placeholder="your-username"
+                          required
+                        />
+                      </div>
+                      <p className="text-xs text-foreground/60">Only letters, numbers, and hyphens.</p>
+                    </label>
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Bio</span>
+                      <textarea value={profile.bio} onChange={(e) => setProfile(p => ({ ...p, bio: e.target.value }))} rows={3} className="rounded-xl border px-3 py-2" placeholder="Tell people about yourself" />
+                    </label>
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium flex items-center gap-2"><ImageIcon className="h-4 w-4" /> Profile photo URL</span>
+                      <div className="flex items-center gap-3">
+                        <img src={profile.avatar || DEFAULT_AVATAR} alt="avatar preview" className="h-11 w-11 rounded-full object-cover border" />
+                        <input
+                          value={profile.avatar || ''}
+                          onChange={(e) => setProfile(p => ({ ...p, avatar: e.target.value }))}
+                          className="h-11 flex-1 rounded-xl border px-3"
+                          placeholder="https://example.com/avatar.jpg"
+                        />
+                      </div>
+                    </label>
+                  </div>
                 </div>
-                <p className="text-xs text-foreground/60">Only letters, numbers, and hyphens.</p>
-              </label>
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Bio</span>
-                <textarea value={profile.bio} onChange={(e) => setProfile(p => ({ ...p, bio: e.target.value }))} rows={3} className="rounded-xl border px-3 py-2" placeholder="Tell people about yourself" />
-              </label>
-            </div>
-          </div>
 
-          {/* Links */}
-          <div className="card p-6">
-            <h2 className="font-semibold mb-4 flex items-center gap-2"><LinkIcon className="h-4 w-4" /> Your links</h2>
-            <div className="space-y-3">
-              {profile.links.map((link) => (
-                <div key={link.id} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
-                  <input value={link.title} onChange={(e) => updateLink(link.id, 'title', e.target.value)} className="h-11 rounded-xl border px-3" placeholder="Link title" />
-                  <input value={link.url} onChange={(e) => updateLink(link.id, 'url', e.target.value)} className="h-11 rounded-xl border px-3 md:col-span-2" placeholder="https://" />
-                  <div className="flex items-center gap-2">
-                    <input value={link.icon} onChange={(e) => updateLink(link.id, 'icon', e.target.value)} className="h-11 w-20 rounded-xl border px-3" placeholder="🎯" />
-                    <button type="button" onClick={() => removeLink(link.id)} className="btn bg-destructive text-destructive-foreground">
-                      <Trash2 className="h-4 w-4" />
+                {/* Links */}
+                <div className="card p-6">
+                  <h2 className="font-semibold mb-4 flex items-center gap-2"><LinkIcon className="h-4 w-4" /> Your links</h2>
+                  <div className="space-y-3">
+                    {profile.links.map((link) => (
+                      <div key={link.id} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
+                        <input value={link.title} onChange={(e) => updateLink(link.id, 'title', e.target.value)} className="h-11 rounded-xl border px-3" placeholder="Link title" />
+                        <input value={link.url} onChange={(e) => updateLink(link.id, 'url', e.target.value)} className="h-11 rounded-xl border px-3 md:col-span-2" placeholder="https://" />
+                        <div className="flex items-center gap-2">
+                          <input value={link.icon} onChange={(e) => updateLink(link.id, 'icon', e.target.value)} className="h-11 w-20 rounded-xl border px-3" placeholder="🎯" />
+                          <button type="button" onClick={() => removeLink(link.id)} className="btn bg-destructive text-destructive-foreground">
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addLink} className="btn border w-full md:w-auto">
+                      <Plus className="h-4 w-4 mr-2" /> Add link
                     </button>
                   </div>
                 </div>
-              ))}
-              <button type="button" onClick={addLink} className="btn border w-full md:w-auto">
-                <Plus className="h-4 w-4 mr-2" /> Add link
-              </button>
-            </div>
-          </div>
 
-          {/* Social */}
-          <div className="card p-6">
-            <h2 className="font-semibold mb-4 flex items-center gap-2"><Globe className="h-4 w-4" /> Social media</h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {Object.entries(profile.social).map(([platform, value]) => (
-                <label key={platform} className="grid gap-2">
-                  <span className="text-sm font-medium capitalize">{platform}</span>
-                  <input value={value as string} onChange={(e) => updateSocial(platform as keyof SocialLinks, e.target.value)} className="h-11 rounded-xl border px-3" placeholder={`https://${platform}.com/username`} />
-                </label>
-              ))}
-            </div>
-          </div>
+                {/* Social */}
+                <div className="card p-6">
+                  <h2 className="font-semibold mb-4 flex items-center gap-2"><Globe className="h-4 w-4" /> Social media</h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {Object.entries(profile.social).map(([platform, value]) => (
+                      <label key={platform} className="grid gap-2">
+                        <span className="text-sm font-medium capitalize">{platform}</span>
+                        <input value={value as string} onChange={(e) => updateSocial(platform as keyof SocialLinks, e.target.value)} className="h-11 rounded-xl border px-3" placeholder={`https://${platform}.com/username`} />
+                      </label>
+                    ))}
+                  </div>
+                </div>
 
-          {/* Theme */}
-          <div className="card p-6">
-            <h2 className="font-semibold mb-4 flex items-center gap-2"><Palette className="h-4 w-4" /> Theme & appearance</h2>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Button color</span>
-                <input type="color" value={profile.theme.buttonColor} onChange={(e) => updateTheme('buttonColor', e.target.value)} className="h-11 rounded-xl border" />
-              </label>
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Background color</span>
-                <input type="color" value={profile.theme.backgroundColor} onChange={(e) => updateTheme('backgroundColor', e.target.value)} className="h-11 rounded-xl border" />
-              </label>
-              <label className="grid gap-2">
-                <span className="text-sm font-medium">Text color</span>
-                <input type="color" value={profile.theme.textColor} onChange={(e) => updateTheme('textColor', e.target.value)} className="h-11 rounded-xl border" />
-              </label>
-            </div>
-          </div>
+                {/* Theme */}
+                <div className="card p-6">
+                  <h2 className="font-semibold mb-4 flex items-center gap-2"><Palette className="h-4 w-4" /> Theme &amp; appearance</h2>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Button color</span>
+                      <input type="color" value={profile.theme.buttonColor} onChange={(e) => updateTheme('buttonColor', e.target.value)} className="h-11 rounded-xl border" />
+                    </label>
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Background color</span>
+                      <input type="color" value={profile.theme.backgroundColor} onChange={(e) => updateTheme('backgroundColor', e.target.value)} className="h-11 rounded-xl border" />
+                    </label>
+                    <label className="grid gap-2">
+                      <span className="text-sm font-medium">Text color</span>
+                      <input type="color" value={profile.theme.textColor} onChange={(e) => updateTheme('textColor', e.target.value)} className="h-11 rounded-xl border" />
+                    </label>
+                  </div>
+                </div>
 
-          {/* Settings */}
-          <div className="card p-6">
-            <h2 className="font-semibold mb-4 flex items-center gap-2"><Settings className="h-4 w-4" /> Settings</h2>
-            <div className="space-y-3">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={profile.settings.isPublic} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, isPublic: e.target.checked } }))} />
-                <span>Make profile public</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={profile.settings.enableAnalytics} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, enableAnalytics: e.target.checked } }))} />
-                <span>Enable analytics</span>
-              </label>
+                {/* Settings */}
+                <div className="card p-6">
+                  <h2 className="font-semibold mb-4 flex items-center gap-2"><Settings className="h-4 w-4" /> Settings</h2>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" checked={profile.settings.isPublic} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, isPublic: e.target.checked } }))} />
+                      <span>Make profile public</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" checked={profile.settings.enableAnalytics} onChange={(e) => setProfile(prev => ({ ...prev, settings: { ...prev.settings, enableAnalytics: e.target.checked } }))} />
+                      <span>Enable analytics</span>
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            {/* Preview Section */}
+            <div className="flex-1 xl:w-1/2">
+              <div className="sticky top-8">
+                <PhonePreview profile={profile} />
+              </div>
             </div>
           </div>
-        </form>
-        </div>
-        
-        {/* Preview Section */}
-        <div className="flex-1 xl:w-1/2">
-          <div className="sticky top-8">
-            <PhonePreview profile={profile} />
-          </div>
-        </div>
-        </div>
         </div>
       </main>
     </div>
